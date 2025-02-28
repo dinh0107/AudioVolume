@@ -1,0 +1,104 @@
+﻿@model IEnumerable<AudioVolume.Models.Brand>
+
+<div class="accordion-item border-left-slate" id="brand">
+    <div class="accordion-header">
+        <div class="card-title">
+            <i class="fa-solid fa-list"></i>
+            Danh sách thương hiệu
+        </div>
+        <button type="button" data-bs-toggle="collapse" data-bs-target="#categoryList">
+            <i class="fa-solid fa-angle-down"></i>
+        </button>
+    </div>
+    <div id="categoryList" class="accordion-collapse collapse show">
+        <div class="accordion-body">
+            <table class="list_table tablecenter mb-4" id="list-cat">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Hình ảnh</th>
+                        <th>Tên</th>
+                        <th>Hoạt động</th>
+                        <th style="width: 160px"></th>
+                    </tr>
+                </thead>
+                <tbody id="sortable-cat">
+                    @foreach (var category in Model)
+                    {
+                        <tr data-id="@category.Id" style="background: #ededed">
+                            <td style="width: 120px;">
+                                <input type="number" name="Sort" value="@category.Sort" class="form_control" />
+                            </td>
+                            <td>
+                                @if (category.Image != null)
+                                {
+                                    <img src="@Path.Combine("/images/brand/", category.Image)" class="img-border" />
+                                }
+                            </td>
+                            <td class="left"><strong>@category.Name</strong></td>
+                            <td>
+                                <label class="form-check-label">
+                                    <input type="checkbox" id="Active" @if (category.Active) { @Html.Raw("value='true' checked")  } else { @Html.Raw("value='false'") } />
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                            <td class="action-col">
+                                <a href="javascript:;" onclick="updateCategory('@category.Id')">Cập nhật - </a>
+                                @Html.ActionLink("Sửa", "UpdateBrand", new { id = category.Id }) -
+                                <a href="javascript:;" onclick="deleteCategory('@category.Id')" style="color: red">Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function deleteCategory(id) {
+        if (confirm("Bạn có chắc chắn xóa không?")) {
+            $.post("/Product/DeleteBrand", { catId: id }, function (data) {
+                if (data) {
+                    $.toast({
+                        text: 'Đang xóa',
+                        position: 'bottom-right',
+                        icon: 'success',
+                    })
+                    $("tr[data-id='" + id + "']").fadeOut();
+                } else {
+                    $.toast({
+                        text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                        icon: 'error',
+                    })
+                }
+            });
+        }
+    }
+    function updateCategory(id) {
+        var divId = $("tr[data-id='" + id + "']");
+        var sort = divId.find("input[name=Sort]").val();
+        var active = divId.find("input#Active").prop("checked");
+        var menu = divId.find("input#Menu").prop("checked");
+        var footer = divId.find("input#Footer").prop("checked");
+
+        if (sort == "") {
+            alert("Bạn hãy nhập số thứ tự");
+        }
+
+        $.post("/Product/UpdateProductCat", { productCatId: id, sort, active, menu, footer }, function (data) {
+            if (data) {
+                $.toast({
+                    text: 'Cập nhật thành công',
+                    position: 'bottom-right',
+                    icon: 'success',
+                })
+            } else {
+                $.toast({
+                    text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                    icon: 'error',
+                })
+            }
+        });
+    }
+</script>

@@ -1,0 +1,90 @@
+﻿@model AudioVolume.Models.Product
+@{ 
+    Random random = new Random();
+    int randomNumber = random.Next(10, 1001);
+}
+
+<li class="item_product">
+    <ul class="list-icon-thongso">
+        @if (Model.GiaSoc)
+        {
+            <li class="bg-color-01" style="background-color:#ff3333">Giá Sốc</li>
+        }
+        @if (Model.QuaTo)
+        {
+            <li class="bg-color-012" style="background-color:#ff3333">Quà TO</li>
+        }
+        @if (Model.BanChay)
+        {
+            <li class="bg-color-02" style="background-color:#dd2f2c">Bán Chạy</li>
+        }
+        @if (Model.New)
+        {
+            <li class="bg-color-075" style="background-color:#FF0000">New 2025</li>
+        }
+        @if (Model.TroGia)
+        {
+            <li class="bg-color-06" style="background-color:#ff5400">Trợ giá    </li>
+        }
+        @if (Model.KichThuoc != null)
+        {
+            <li class="bg-color-064" style="background-color:#4609f5">@Model.KichThuoc</li>
+        }
+    </ul>
+    <a href="@Url.Action("ProductDetail", new { url = Model.Url })">
+        @if (Model.Image != null)
+        {
+            <img src="@Path.Combine("/images/products/", Model.Image)" alt="@Model.Name" title="@Model.Name">
+        }
+        @if (Model.CoverImage != null)
+        {
+            <div class="new">
+                <img alt="@Model.Name"
+                     src="@Path.Combine("/images/products/", Model.CoverImage)" />
+            </div>
+        }
+
+    </a>
+    <div class="clearfix"></div>
+    <p class="header_title">
+        <a href="@Url.Action("ProductDetail", new {url = Model.Url})">
+            @Model.Name
+        </a>
+    </p>
+    <div class="width-70p">
+        @if (Model.PriceSale > 0)
+        {
+            var percent = (decimal)Model.PriceSale / (decimal)Model.Price;
+            var discount = 100 - Math.Truncate(percent * 100);
+            <span class="text-price price-new">
+                <b>@Html.DisplayFor(a => Model.PriceSale)</b>
+            </span>
+            <span class="text-price price-old">
+                <b>@Html.DisplayFor(a => Model.Price)</b>
+                <span>-@discount%</span>
+            </span>
+        }
+        else if (Model.Price > 0)
+        {
+            <span class="text-price price-new">
+                <b>@Html.DisplayFor(a => Model.Price)</b>
+            </span>
+        }
+        else
+        {
+            <span class="text-price price-new">
+                <b>Liên hệ</b>
+            </span>
+        }
+    </div>
+    <div class="clearfix"></div>
+    <p class="rating_lst">
+        <span>
+            5/5
+            <i class="fa-solid fa-star"></i>
+        </span><span>
+            Đã Bán:
+            @randomNumber
+        </span>
+    </p>
+</li>

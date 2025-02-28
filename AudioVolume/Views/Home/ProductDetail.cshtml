@@ -1,0 +1,699 @@
+﻿@model AudioVolume.ViewModel.ProductDetailViewModel
+@using AudioVolume.Models
+@using Newtonsoft.Json
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+    ViewBag.Title = Model.Product.TitleMeta ?? Model.Product.Name;
+    ViewBag.Description = Model.Product.DescriptionMeta;
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("ProductDetail", new { url = Model.Product.Url });
+    if (Model.Product.Image != null)
+    {
+        ViewBag.ImageShare = Request.Url?.GetLeftPart(UriPartial.Authority) + Path.Combine("/images/products/", Model.Product.Image);
+    }
+}
+<style>
+    .fancybox-close-small, #imageUpload {
+        display: none;
+    }
+
+    #rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        font-size: 30px;
+    }
+
+        #rating i {
+            cursor: pointer;
+            color: #ccc;
+            transition: color 0.3s;
+        }
+
+            #rating i.active,
+            #rating i:hover,
+            #rating i:hover ~ i {
+                color: #f39c12;
+            }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="filter-all-logo" style="margin-top: 15px;">
+            <ul>
+                @foreach (var item in Model.Brands)
+                {
+                    <li>
+                        <a href="loa-jbl-bluetooth/">
+                            <img src="@Path.Combine("/images/brand/", item.Image)">
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="header-product-detail-new product-info-top p-3" id="header-product-detail-new">
+            <div class="header-title">
+                <h1>
+                    <a href="">
+                        @Model.Product.Name
+                    </a>
+                </h1>
+                <p class="header-title-des">
+                    <span class="rank_star">
+                        <strong>5/5</strong>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </span>
+                </p>
+            </div>
+            <div class="product-info-top-image">
+                <div class="product-image">
+                    <div class="main-product-image" id="main-product-image" data-active="1">
+                        @if (Model.Product.Image != null)
+                        {
+                            <img alt="@Model.Product.Name" src="@Path.Combine("/images/products/",Model.Product.Image)">
+                        }
+                        @*<div class="zoom-image-product" id="zoom-image-product">
+                                <i class="fa fa-search font-size-cus" aria-hidden="true"></i><br>
+                                Xem ảnh<br>lớn
+                            </div>*@
+                    </div>
+
+
+                    <div class="list-product-image" style="display:block">
+                        <div class="iframe-list-product-image">
+                            <div class="list-product-image-content owl-carousel owl-theme" id="list-product-image">
+                                @if (Model.Product.Feedback != null)
+                                {
+                                    var arrPic = Model.Product.Feedback.Split(',');
+
+                                    foreach (var item in arrPic)
+                                    {
+                                        <div class="item">
+                                            <img data-src="@Url.Content("~/images/feedbacks/" + item)"
+                                                 src="@Url.Content("~/images/feedbacks/" + item)"
+                                                 alt="@Model.Product.Name" class="data-mouse">
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="icon-slider-imgage icon-slider-imgage-left" id="icon-slider-imgage-left">
+                            <img src="https://hdradio.vn/img/left-arrow.svg" alt="left-arrow">
+                        </div>
+                        <div class="icon-slider-imgage icon-slider-imgage-right" id="icon-slider-imgage-right">
+                            <img src="https://hdradio.vn/img/right-arrow.svg" alt="right-arrow">
+                        </div>
+                    </div>
+                </div>
+                <div class="full_phukien">
+                    <img src="https://hdradio.vn/img/icon-new/icon-new-01.png" alt=""><span>Mới, đầy đủ phụ kiện</span> từ nhà sản xuất
+                </div>
+            </div>
+            <div class="product-info-top-info">
+                @if (Model.Product.PriceSale > 0)
+                {
+                    var percent = (decimal)Model.Product.PriceSale / (decimal)Model.Product.Price;
+                    var tru = (decimal)Model.Product.Price - (decimal)Model.Product.PriceSale;
+                    Model.Tru = tru;
+                    var discount = 100 - Math.Truncate(percent * 100);
+                    <div class="product-info-price">
+                        <p class="product-info-price-sell product_price">
+                            <span>Giá bán:</span><span>@Html.DisplayFor(a => a.Product.PriceSale)</span>
+                        </p>
+                        <p class="product-info-price-old product_price_old">
+                            <span class="product-info-price-old-title">Giá cũ:</span>
+                            <span class="product-info-price-old-number">@Html.DisplayFor(a => a.Product.Price)</span>
+                        </p>
+                    </div>
+                    <p class="product-info-price-old product-info-price-old-new" style="clear: both">
+                        <span class="product-info-price-old-title">Tiết kiệm:</span>
+                        <span class="product-info-price-old-number product_price_sales">@Html.DisplayFor(a => Model.Tru)</span>
+                        <span class="product-info-price-old-saleoffper product_price_sale_percent"> (-@discount%)</span>
+                    </p>
+                }
+
+                <p class="product-info-status" id="product-info-quantity-status">
+                    <img src="~/Content/images/icon-new-09.png" alt="icon-new-09.png">
+                    <span>Còn Hàng</span>
+                </p>
+                <div class="clearfix"></div>
+
+                <div class="product-model">
+                    @*<p>Loa di động biểu diễn BOSE được yêu thích nhất</p>*@
+                    <ul>
+                        @foreach (var item in Model.Product.ProductOptions)
+                        {
+                            <li class="option-i">
+                                <a href="javascripts:;">
+                                    <p class="header_title">
+                                        <img src="https://hdradio.vn/img/hinh-tron-check.svg">
+                                        <span>@item.Name</span>
+                                    </p><span>@Html.DisplayFor(a => item.Price)<sup>đ</sup></span>
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+                <div class="clearfix"></div>
+                <ul class="product-info-top-list-info">
+                    <li>
+                        <p>Đơn vị tính</p>
+                        <p>@Model.Product.Donvi</p>
+                    </li>
+                    <li>
+                        <p>Bảo hành</p>
+                        <p>@Model.Product.BaoHanh</p>
+                    </li>
+                    <li>
+                        <p>Nguồn gốc / Xuất xứ</p>
+                        <p>@Model.Product.Nguongoc</p>
+                    </li>
+                </ul>
+                @*<div class="product-info-gift">
+                        <p style="text-align: center;">MUA NGAY NHẬN ƯU ĐÃI ĐẶC BIỆT</p>
+                        <ul>
+                            <li style="text-align: left;">Tặng gói&nbsp;Setup tại nhà trị giá:&nbsp;<span style="color: #ff0000;"><strong>500.000đ&nbsp;</strong><span style="color: #000000;">(10Km)</span></span></li>
+                            <li style="text-align: left;">Tặng gói dịch vụ bảo hành tại nhà:&nbsp;<span style="color: #ff0000;"><strong>500.000đ&nbsp;</strong><span style="color: #000000;">(10km)</span></span></li>
+                            <li style="text-align: left;">Giảm&nbsp;<strong><span style="color: #ff0000;">100.000đ</span></strong>&nbsp;cho khách từng mua tại&nbsp;<strong>HD<span style="color: #ff6600;">RADIO</span></strong></li>
+                            <li>Chính Hãng 100%<span style="color: #ff0000;">,<span style="color: #000000;">&nbsp;Xuất hóa đơn đầy đủ</span></span></li>
+                            <li>Bảo hành loa lên <strong>24 tháng (từ&nbsp;1.1.2025)</strong></li>
+                        </ul>
+                    </div>*@
+
+                @*<input type="hidden" name="Model" id="Model" value="0">
+                    <input type="hidden" name="Variant" id="Variant" value="0">
+                    <input type="hidden" name="idSP" id="idSP" value="5731">
+                    <input type="hidden" name="SoLuong" id="SoLuong" value="1">*@
+                <!-- <a href="javascript:void(0);" class="Add-Cart-Fast btn-add-cart-new">
+                    <p>Mua Ngay</p>
+                    <p>Giao hàng tận nơi nhanh chóng</p>
+                </a> -->
+                <div class="btn_buy_new" id="product_detail_button_buy">
+                    <a href="javascript:void(0);" class="Add-Cart-Fast btn-add-cart-new">
+                        <p>Mua Ngay</p>
+                        <p>Giao hàng tận nơi nhanh chóng</p>
+                    </a>
+                </div>
+                <ul class="product-info-button-support d-block">
+                    <li>
+                        <a href="https://zalo.me/@config.Zalo" target="_blank">
+                            <p>Chat Zalo</p>
+                            <p>Giải đáp hỗ trợ tức thì</p>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="product-info-hotline">
+                    <li>
+                        <a href="tel:@config.Hotline">
+                            <p>Miễn cước</p>
+                            <p>1800 0042</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tel:@config.Hotline2">
+                            <p>Miền Nam</p>
+                            <p>@config.Hotline2</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tel:@config.Hotline3">
+                            <p>Miền Bắc</p>
+                            <p>@config.Hotline3</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="product-info-top-more">
+                <ul class="list-support-buy">
+                    <li>
+                        <p>Bạn Nên Chọn Chúng Tôi Vì</p>
+                        <p>Showroom lớn nhất Hà Nội &amp; Hồ Chí Minh</p>
+                    </li>
+                    <li>
+                        <img src="https://hdradio.vn/img/icon-new/icon-new-08.jpg" alt="icon-new-08">
+                        <p>Trải Nghiệm Miễn Phí</p>
+                        <p>
+                            Tại Hệ Thống Showroom
+                        </p>
+                    </li>
+                    <li>
+                        <img src="https://hdradio.vn/img/icon-new/icon-new-07.jpg" alt="icon-new-07">
+                        <p>Giao Hàng Miễn Phí 5-30Km</p>
+                        <p>
+                            Xem chi tiết chính sách
+                        </p>
+                    </li>
+                    <li>
+                        <img src="https://hdradio.vn/img/icon-new/icon-new-05.jpg" alt="icon-new-05">
+                        <p>Hỗ trợ SETUP Miễn Phí</p>
+                        <p>Chuyên gia hàng đầu tại HDRADIO</p>
+                    </li>
+                    <li>
+                        <img src="https://hdradio.vn/img/icon-new/icon-new-06.jpg" alt="icon-new-06">
+                        <p>1 Đổi 1 lên đến 15 ngày</p>
+                        <p>Xem chi tiết chính sách
+                    </li>
+                    <li>
+                        <img src="https://hdradio.vn/img/icon-new/icon-new-04.jpg" alt="icon-new-04">
+                        <p>Bảo Hành Tại Nhà</p>
+                        <p>Dàn Karaoke, Dàn Nhạc - Phim</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        @if (Model.Products.Any())
+        {
+            <div class="product_hot_top product_same_price">
+                <div class="header_product_hot_top">
+                    <h3>Sản phẩm cùng phân khúc</h3>
+                </div>
+                <div class="content_product_hot_top">
+                    <div style="display: block;position: relative;">
+                        <ul class="list-product-all owl-carousel owl-loaded owl-drag" id="product_slider_catalog">
+                            @foreach (var item in Model.Products)
+                            {
+                                @Html.Partial("_ProductItem", item)
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="content-product-new" id="danh-gia">
+            <div class="content-product-new-left">
+                <div class="content-detail-product">
+                    <div class="pg-mobile pg-thongso">
+                        <p class="title_thongso_kythuat">Thông số kỹ thuật</p>
+                        <div class="content_thongso_kythuat">
+                            <table class="table table-bordered table-responsive">
+                                <tbody>
+                                    @foreach (var item in Model.Product.ProductInfos.Take(5))
+                                    {
+                                        <tr>
+                                            <td><strong>@item.Name</strong></td>
+                                            <td>@item.Body</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="more_view_thongso_kythuat">
+                                Xem đầy đủ thông số kỹ thuật
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product_info_center pg-details">
+                        @Html.Raw(Model.Product.Body)
+                    </div>
+                </div>
+            </div>
+            <div class="content-product-new-right">
+                <div class="pg-pc pg-thongso">
+                    <p class="title_thongso_kythuat">Thông số kỹ thuật</p>
+                    <div class="content_thongso_kythuat">
+                        <table class="table table-bordered table-responsive">
+                            <tbody>
+                                @foreach (var item in Model.Product.ProductInfos.Take(5))
+                                {
+                                    <tr>
+                                        <td><strong>@item.Name</strong></td>
+                                        <td>@item.Body</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="more_view_thongso_kythuat">
+                            Xem đầy đủ thông số kỹ thuật
+                        </div>
+                    </div>
+                </div>
+
+                <div class="popup_thongso_kythuat" id="popup_thongso_kythuat">
+                    <p class="header_title">Thông số kỹ thuật chi tiết @Model.Product.Name</p>
+                    <table class="table table-bordered table-responsive">
+                        <tbody>
+                            @foreach (var item in Model.Product.ProductInfos)
+                            {
+                                <tr>
+                                    <td><strong>@item.Name</strong></td>
+                                    <td>@item.Body</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+        <div class="product-detail-comment">
+            <h3 class="title_comment_main">Đánh giá @Model.Product.Name</h3>
+            <div class="box_ranking">
+                <div class="box_number">
+                    <span class="big_number">5/5</span>
+                    <span class="star_ranking">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </span>
+                    <span class="total_rating">@Model.Product.ProductRatings.Count() đánh giá</span>
+                </div>
+                <div class="list_rating">
+                    <ul>
+                        <li>
+                            <span class="rate">1 <i class="material-icons">star</i></span>
+                            <span class="process"><span style="width: 0%;"></span></span>
+                            <span class="total">
+                                <span>0 đánh giá</span>
+                                <span>0%</span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="rate">2 <i class="material-icons">star</i></span>
+                            <span class="process"><span style="width: 0%;"></span></span>
+                            <span class="total">
+                                <span>0 đánh giá</span>
+                                <span>0%</span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="rate">3 <i class="material-icons">star</i></span>
+                            <span class="process"><span style="width: 0%;"></span></span>
+                            <span class="total">
+                                <span>0 đánh giá</span>
+                                <span>0%</span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="rate">4 <i class="material-icons">star</i></span>
+                            <span class="process"><span style="width: 0%;"></span></span>
+                            <span class="total">
+                                <span>0 đánh giá</span>
+                                <span>0%</span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="rate">5 <i class="material-icons">star</i></span>
+                            <span class="process"><span style="width: 100%;"></span></span>
+                            <span class="total">
+                                <span>15 đánh giá</span>
+                                <span>100%</span>
+                            </span>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="add_rating">
+                    <button id="btn_add_rating">
+                        <span>
+                            <i class="fa-solid fa-circle-star"></i>
+                            Gửi đánh giá của bạn
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <div class="rating_content" id="rating_content">
+                <ul class="rating_content_ul" id="rating_content_ul">
+                    @foreach (var item in Model.Product.ProductRatings)
+                    {
+                        <li class="item_comment_127743" id="item_comment_127743" data-id="127743">
+                            <p class="line_name">
+                                <strong>@item.Name</strong>
+                                <img src="https://hdradio.vn/img/icon_cmt.png" alt="icon_cmt">
+                                <span class="buy">Đã mua hàng</span>
+                            </p>
+                            <p class="line_star">
+                                @for (var i = 0; i < item.Rate; i++)
+                                {
+                                    <i class="fa-solid fa-star"></i>
+                                }
+                            </p>
+                            <p class="line_content"><span>@item.Body</span></p>
+                            <div class="cmt_img_view">
+                                @if (item.Image != null)
+                                {
+                                    <a class="fancybox" data-fancybox="images-cmt-127743" href="@Path.Combine("/images/review/", item.Image)">
+                                        <img class="cmt_review" src="@Path.Combine("/images/comment/", item.Image)">
+                                    </a>
+                                }
+                            </div>
+                            <p class="line_end">
+                                <span>@item.CreateDate.ToString("dd/MM/yyyy")</span>
+                            </p>
+                        </li>
+
+                    }
+                </ul>
+                @*<div class="get_more_ranking" id="get_more_ranking" style="display: block;">
+                        <p>Xem thêm đánh giá khác</p>
+                    </div>*@
+            </div>
+        </div>
+
+    </div>
+    <div id="from-rate" class="popup-form popup-rank">
+        <div class="header">
+            <div class="header_title"><span>Đánh Giá</span></div>
+            <div class="header_icon">
+                <a class="close_popup close_fancybox" href="javascript:void(0);">x Đóng</a>
+            </div>
+        </div>
+        <div class="main">
+            <div class="info_product">
+                <div class="image">
+                    @if (Model.Product.Image != null)
+                    {
+                        <img src="@Path.Combine("/images/products/", Model.Product.Image)" alt="@Model.Product.Name">
+                    }
+                </div>
+                <div class="name"><span>@Model.Product.Name</span></div>
+            </div>
+            <form method="post" id="frm_ranking_modal" novalidate="novalidate" enctype="multipart/form-data">
+
+                @Html.ValidationSummary(true)
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="ProductId" value="@Model.Product.Id">
+                @Html.Action("Rating")
+                <div class="form-button">
+                    <button type="submit" class="frm-btn">Gửi đánh giá ngay</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="contact-f" class="popup-form popup-rank contact">
+        <div class="header">
+            <div class="header_title"><span>Đánh Giá</span></div>
+            <div class="header_icon">
+                <a class="close_popup close_fancybox" href="javascript:void(0);">x Đóng</a>
+            </div>
+        </div>
+        <div class="main">
+            <form method="post" id="frm_ranking_modal" novalidate="novalidate" enctype="multipart/form-data">
+                @Html.ValidationSummary(true)
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="ProductName" name="ProductName" value="@Model.Product.Name">
+                @Html.Action("ContactForm")
+                <div class="form-button">
+                    <button type="submit" class="frm-btn" onclick="submitForm()">Liên hệ ngay</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+@section scripts{
+    <script>
+        $("#frm_ranking_modal").on("submit", function (e) {
+            e.preventDefault();
+            var formData = new FormData(this); // Tạo formData để chứa file
+
+            $.ajax({
+                url: "/Home/RatingProduct",
+                type: "POST",
+                data: formData,
+                processData: false,  // Không xử lý dữ liệu
+                contentType: false,  // Không đặt kiểu nội dung
+                success: function (data) {
+                    if (data.status) {
+                        $.toast({
+                            heading: "Đánh giá thành công",
+                            icon: "success",
+                            position: "bottom-right"
+                        });
+                        $("#frm_ranking_modal").trigger("reset");
+                        $(".close").click();
+                    } else {
+                        $.toast({
+                            heading: "Đánh giá không thành công",
+                            icon: "error",
+                            position: "bottom-right"
+                        });
+                    }
+                },
+                error: function () {
+                    $.toast({
+                        heading: "Lỗi khi gửi dữ liệu!",
+                        icon: "error",
+                        position: "bottom-right"
+                    });
+                }
+            });
+        });
+
+        $("#iconChoosefile").on("click", function () {
+            $("#imageUpload").click();
+        });
+
+        $("#imageUpload").on("change", function (event) {
+            let fileList = event.target.files;
+            let previewList = $("#lst_pre_img");
+            previewList.html(""); // Xóa danh sách cũ
+
+            if (fileList.length > 0) {
+                $.each(fileList, function (index, file) {
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        let img = `<li><img src="${e.target.result}" alt="Ảnh đã chọn" style="width: 80px; height: 80px; object-fit: cover; margin: 5px;"></li>`;
+                        previewList.append(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+        var product_slider = $("#product_slider_catalog");
+        product_slider.owlCarousel({
+            nav: false,
+            loop: false,
+            autoplay: true,
+            autoplayTimeout: 3000,
+            autoplayHoverPause: true,
+            margin: 10,
+            responsive: {
+                0: {
+                    items: 2,
+                },
+                600: {
+                    items: 2,
+                },
+                1000: {
+                    items: 5,
+                }
+            }
+        });
+        $(document).ready(function () {
+            $(".more_view_thongso_kythuat").on("click", function () {
+                $.fancybox.open({
+                    src: "#popup_thongso_kythuat",
+                    type: "inline",
+                });
+            });
+            $("#btn_add_rating").on("click", function () {
+                $.fancybox.open({
+                    src: "#from-rate",
+                });
+            });
+
+            $(".btn_buy_new").on("click", function () {
+                $.fancybox.open({
+                    src: "#contact-f",
+                });
+            });
+
+            $("#rating i").on("click", function () {
+                let selectedValue = $(this).data("value");
+                $("#rating-value").val(selectedValue); // Gán giá trị vào input
+
+                $("#rating i").removeClass("active"); // Xóa tất cả active
+                $("#rating i").each(function () {
+                    if ($(this).data("value") <= selectedValue) {
+                        $(this).addClass("active"); // Chỉ thêm active cho sao được chọn
+                    }
+                });
+            });
+        });
+
+
+        var owl = $('#list-product-image');
+
+        // Khởi tạo Owl Carousel
+        owl.owlCarousel({
+            nav: false,
+            loop: false,
+            autoplay: false,
+            autoplayTimeout: 3000,
+            autoplayHoverPause: true,
+            margin: 10,
+            responsive: {
+                0: { items: 2 },
+                600: { items: 2 },
+                1000: { items: 5 }
+            }
+        });
+        $(".data-mouse").hover(function () {
+            var newSrc = $(this).attr("src");
+            console.log("Hovered image src: ", newSrc);
+            if (newSrc) {
+                $(".main-product-image img").attr("src", newSrc);
+            }
+        });
+
+        // Điều hướng next/prev slider
+        $('#nav_product_slider_catalog_left').click(function () {
+            owl.trigger('next.owl.carousel');
+        });
+
+        $('#nav_product_slider_catalog_right').click(function () {
+            owl.trigger('prev.owl.carousel', [300]);
+        });
+        $(".option-i").on("click", function () {
+            $(".option-i").removeClass("active");
+            $(this).addClass("active");
+        });
+
+        function submitForm() {
+            // Lấy giá trị của Anti-Forgery Token
+            var token = $('input[name="__RequestVerificationToken"]').val();
+
+            var formData = {
+                __RequestVerificationToken: token,
+                Fullname: $('#Fullname').val(),
+                Mobile: $('#Mobile').val(),
+                Email: $('#Email').val(),
+                ProductName: $('#ProductName').val()
+            };
+            console.log(formData)
+            @*$.ajax({
+                url: '@Url.Action("ContactForm", "Home")',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.status) {
+                       $.toast({
+                         heading: "Đánh giá thành công",
+                         icon: "success",
+                         position: "bottom-right"
+                     });
+                    } else {
+                        alert('Đã xảy ra lỗi: ' + response.msg);
+                    }
+                },
+                error: function () {
+                    alert('Đã xảy ra lỗi trong quá trình gửi dữ liệu.');
+                }
+            });*@
+        }
+
+
+    </script>
+
+}

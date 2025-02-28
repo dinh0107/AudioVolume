@@ -1,0 +1,517 @@
+﻿@model AudioVolume.ViewModel.HomeViewModel
+@using AudioVolume.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+    ViewBag.Title = config.Title;
+    ViewBag.Description = config.Description;
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("Index");
+    var fb = Model.Banners.FirstOrDefault(a => a.GroupId == 2 && a.Image != null);
+    if (fb != null)
+    {
+        ViewBag.ImageShare = Request.Url?.GetLeftPart(UriPartial.Authority) + Path.Combine("/images/banners/", fb.Image);
+    }
+}
+
+<h1 style="display: none;">HDRADIO Hệ Thống Phân Phối Âm Thanh Hàng Đầu Việt Nam</h1>
+<section id="slider">
+    <!--slider-->
+    @*<div class="visible-md visible-sm visible-xs">
+        <ul class="home-menu pg-show">
+            <li>
+                <a href="loa-bluetooth/">Loa Bluetooth</a>
+                <span class="hot">HOT</span>
+            </li>
+            <li>
+                <a href="loa-keo/">Loa kéo</a>
+                <span class="hot">HOT</span>
+            </li>
+            <li>
+                <a href="loa-soundbar/">Loa Soundbar</a>
+            </li>
+            <li>
+                <a href="am-thanh-karaoke/">Âm thanh KARAOKE</a>
+                <span class="hot">HOT</span>
+            </li>
+            <li>
+                <a href="am-thanh-xem-phim/">Dàn Nhạc Phim</a>
+                <span class="hot">HOT</span>
+            </li>
+            <li>
+                <a href="am-thanh-nghe-nhac/">Âm Thanh Nhạc - Phim</a>
+            </li>
+            <li>
+                <a href="am-thanh-hi-end/">Âm Thanh Hi-End</a>
+            </li>
+            <li>
+                <a href="am-thanh-hoi-truong/">Âm Thanh Hội Trường</a>
+            </li>
+            <li>
+                <a href="tai-nghe/">Tai Nghe</a>
+                <span class="hot">HOT</span>
+            </li>
+            <li>
+                <a href="thiet-bi-trinh-chieu/">Máy Chiếu Màn Chiếu</a>
+            </li>
+            <li>
+                <a href="nhac-cu/">Nhạc Cụ</a>
+            </li>
+            <li>
+                <a href="phong-chieu-phim/">Phòng Chiếu Phim</a>
+            </li>
+            <li>
+                <a href="phu-kien/">Phụ Kiện Nghe Nhìn</a>
+            </li>
+            <li>
+                <a href="cong-trinh-tieu-bieu/">
+                    Công trình tiêu biểu
+                </a>
+            </li>
+            <li>
+                <a href="khuyen-mai-moi.html" target="_blank">
+                    <p>Khuyến Mại</p>
+                    <p> 19/2 - 28/2 </p>
+                </a>
+            </li>
+            <li class="clearfix"></li>
+        </ul>
+    </div>*@
+
+    <div class="container">
+        <div class="row justify-content-end ">
+            <div class="content-home-top-new">
+                <div class="content-home-top-new-slider" style="padding-left: 0px;padding-right: 0px;">
+                    <section class="pg-slider-full">
+                        <div class="main_slider_home">
+                            <div id="sync1" class="owl-carousel owl-theme">
+                                @foreach (var item in Model.Banners.Where(a => a.GroupId == 1))
+                                {
+
+                                    <div class="item">
+                                        <a href="@item.Url">
+                                            <img src="@Path.Combine("/images/banners/", item.Image)"
+                                                 alt="@item.BannerName">
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                            <div id="sync2" class="owl-carousel owl-theme  hidden-sm hidden-xs hidden-md">
+                                @foreach (var item in Model.Banners.Where(a => a.GroupId == 1))
+                                {
+                                    <div class="item">
+                                        @Html.Raw(item.BannerName)
+                                    </div>
+                                }
+                            </div>
+                            <span class="nav_slider nav_slider_left"><i class="fa-solid fa-angle-left"></i></span>
+                            <span class="nav_slider nav_slider_right"><i class="fa-solid fa-angle-right"></i></span>
+                        </div>
+                        <script>
+
+                        </script>
+                    </section>
+                </div>
+                <div class="content-home-top-new-news hidden-sm hidden-xs hidden-md">
+                    <div class="single-products">
+                        @if (Model.Articles.Any())
+                        {
+                            <div class="productinfo">
+                                <h2 class="media-heading">
+                                    TIN TỨC
+                                </h2>
+                                <div class="sidebar-news">
+                                    @foreach (var item in Model.Articles)
+                                    {
+                                        <div class="item-news">
+                                            <div class="content">
+                                                <p class="text">
+                                                    <a href="@Url.Action("ArticleDetail", new {url = item.Url})">
+                                                        @item.Subject
+                                                    </a>
+                                                </p>
+                                                <p class="note">
+                                                    @item.CreateDate.ToString("dd-MM-yyyy")
+                                                </p>
+                                            </div>
+                                            <div class="image">
+                                                @if (item.Image != null)
+                                                {
+                                                    <a href="@Url.Action("ArticleDetail", new {url = item.Url})">
+                                                        <img src="@Path.Combine("/images/articles/", item.Image)"
+                                                             alt="@item.Subject" />
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    }
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section><!--/slider-->
+@if (Model.Products.Any())
+{
+    <div class="container">
+        <div class="row">
+            <div class="product_hot_top w-100" 11 22 style="margin-top:10px; margin-bottom:10px">
+                <div class="header_product_hot_top">
+                    <img src="~/Content/images/ctkm-sau-tet-treo-web-3.jpg" alt="hot-prodcut">
+                </div>
+                <div class="content_product_hot_top" style="border-color: #ca3108;background-color: #ca3108">
+                    <div style="display: block;position: relative;">
+                        <ul class="list-product-all owl-carousel" id="product_slider_catalog">
+                            @foreach (var item in Model.Products)
+                            {
+                                Random random = new Random();
+                                int randomNumber = random.Next(10, 1001);
+                                <li class="item_product">
+                                    <ul class="list-icon-thongso">
+                                        @if (item.GiaSoc)
+                                        {
+                                            <li class="bg-color-01" style="background-color:#ff3333">Giá Sốc</li>
+                                        }
+                                        @if (item.QuaTo)
+                                        {
+                                            <li class="bg-color-012" style="background-color:#ff3333">Quà TO</li>
+                                        }
+                                        @if (item.BanChay)
+                                        {
+                                            <li class="bg-color-02" style="background-color:#dd2f2c">Bán Chạy</li>
+                                        }
+                                        @if (item.New)
+                                        {
+                                            <li class="bg-color-075" style="background-color:#FF0000">New 2025</li>
+                                        }
+                                        @if (item.TroGia)
+                                        {
+                                            <li class="bg-color-06" style="background-color:#ff5400">Trợ giá    </li>
+                                        }
+                                        @if (item.KichThuoc != null)
+                                        {
+                                            <li class="bg-color-064" style="background-color:#4609f5">@item.KichThuoc</li>
+                                        }
+                                    </ul>
+                                    <a href="@Url.Action("ProductDetail", new { url = item.Url })">
+                                        @if (item.Image != null)
+                                        {
+                                            <img src="@Path.Combine("/images/products/", item.Image)" alt="@item.Name" title="@item.Name">
+                                        }
+                                        @if (item.CoverImage != null)
+                                        {
+                                            <div class="new">
+                                                <img alt="@item.Name"
+                                                     src="@Path.Combine("/images/products/", item.CoverImage)" />
+                                            </div>
+                                        }
+
+                                    </a>
+                                    <div class="clearfix"></div>
+                                    <p class="header_title">
+                                        <a href="@Url.Action("ProductDetail", new {url = item.Url})">
+                                            @item.Name
+                                        </a>
+                                    </p>
+                                    <div class="width-70p">
+                                        @if (item.PriceSale > 0)
+                                        {
+                                            var percent = (decimal)item.PriceSale / (decimal)item.Price;
+                                            var discount = 100 - Math.Truncate(percent * 100);
+                                            <span class="text-price price-new">
+                                                <b>@Html.DisplayFor(a => item.PriceSale)</b>
+                                            </span>
+                                            <span class="text-price price-old">
+                                                <b>@Html.DisplayFor(a => item.Price)</b>
+                                                <span>-@discount%</span>
+                                            </span>
+                                        }
+                                        else if (item.Price > 0)
+                                        {
+                                            <span class="text-price price-new">
+                                                <b>@Html.DisplayFor(a => item.Price)</b>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-price price-new">
+                                                <b>Liên hệ</b>
+                                            </span>
+                                        }
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <p class="rating_lst">
+                                        <span>
+                                            5/5
+                                            <i class="fa-solid fa-star"></i>
+                                        </span><span>
+                                            Đã Bán:
+                                            @randomNumber
+                                        </span>
+                                    </p>
+                                </li>
+                            }
+
+                        </ul>
+                        <div class=" nav_product_slider_catalog" id="nav_product_slider_catalog_left">
+                            <i class="fa-solid fa-angle-left"></i>
+                        </div>
+                        <div class=" nav_product_slider_catalog" id="nav_product_slider_catalog_right">
+                            <i class="fa-solid fa-angle-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@if (Model.CategoryItems.Any())
+{
+    foreach (var cat in Model.CategoryItems)
+    {
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="header_group">
+                        <span>@(cat.ProductCategory.HomeName ?? cat.ProductCategory.CategoryName)</span>
+                    </div>
+                    @if (Model.ChildCat.Any(a => a.ParentId == cat.ProductCategory.Id))
+                    {
+                        <div class="nav_group_link">
+                            <ul>
+                                @foreach (var child in Model.ChildCat.Where(a => a.ParentId == cat.ProductCategory.Id))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("ProductCategory", new {url = child.Url})" target="_blank">
+                                            @child.CategoryName
+                                        </a>
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+                    }
+
+                    @if (cat.Products.Any())
+                    {
+                        <ul class="list-product-all">
+                            @foreach (var item in cat.Products)
+                            {
+                                <li class="item_product">
+                                    <ul class="list-icon-thongso">
+                                        @if (item.GiaSoc)
+                                        {
+                                            <li class="bg-color-01" style="background-color:#ff3333">Giá Sốc</li>
+                                        }
+                                        @if (item.QuaTo)
+                                        {
+                                            <li class="bg-color-012" style="background-color:#ff3333">Quà TO</li>
+                                        }
+                                        @if (item.BanChay)
+                                        {
+                                            <li class="bg-color-02" style="background-color:#dd2f2c">Bán Chạy</li>
+                                        }
+                                        @if (item.New)
+                                        {
+                                            <li class="bg-color-075" style="background-color:#FF0000">New 2025</li>
+                                        }
+                                        @if (item.TroGia)
+                                        {
+                                            <li class="bg-color-06" style="background-color:#ff5400">Trợ giá    </li>
+                                        }
+                                        @if (item.KichThuoc != null)
+                                        {
+                                            <li class="bg-color-064" style="background-color:#4609f5">@item.KichThuoc</li>
+                                        }
+                                    </ul>
+                                    <a href="@Url.Action("ProductDetail", new { url = item.Url })">
+                                        @if (item.Image != null)
+                                        {
+                                            <img src="@Path.Combine("/images/products/", item.Image)" alt="@item.Name" title="@item.Name">
+                                        }
+                                        @if (item.CoverImage != null)
+                                        {
+                                            <div class="new">
+                                                <img alt="@item.Name"
+                                                     src="@Path.Combine("/images/products/", item.CoverImage)" />
+                                            </div>
+                                        }
+
+                                    </a>
+                                    <div class="clearfix"></div>
+                                    <p class="header_title">
+                                        <a href="@Url.Action("ProductDetail", new {url = item.Url})">
+                                            @item.Name
+                                        </a>
+                                    </p>
+                                    <div class="width-70p">
+                                        @if (item.PriceSale > 0)
+                                        {
+                                            var percent = (decimal)item.PriceSale / (decimal)item.Price;
+                                            var discount = 100 - Math.Truncate(percent * 100);
+                                            <span class="text-price price-new">
+                                                <b>@Html.DisplayFor(a => item.PriceSale)</b>
+                                            </span>
+                                            <span class="text-price price-old">
+                                                <b>@Html.DisplayFor(a => item.Price)</b>
+                                                <span>-@discount%</span>
+                                            </span>
+                                        }
+                                        else if (item.Price > 0)
+                                        {
+                                            <span class="text-price price-new">
+                                                <b>@Html.DisplayFor(a => item.Price)</b>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-price price-new">
+                                                <b>Liên hệ</b>
+                                            </span>
+                                        }
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <p class="rating_lst">
+                                        <span>
+                                            5/5 <i class="fa-solid fa-star"></i>
+                                        </span>
+                                        @*<span>
+                                                Đã Bán:
+                                                239
+                                            </span>*@
+                                    </p>
+                                </li>
+                            }
+                        </ul>
+
+                    }
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="view_product_more view_product_more_home">
+                        <a href="@Url.Action("ProductCategory", new {url = cat.ProductCategory.Url})">
+                            <p>
+                                Xem Thêm @cat.ProductCategory.CategoryName <i class="fa-solid fa-angle-double-down"></i>
+                            </p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    }
+}
+
+
+@section Scripts{
+    <script>
+        homeJs()
+        $(window).on('load', function () {
+
+            var sync1 = $("#sync1");
+            var sync2 = $("#sync2");
+            var slidesPerPage = 4;
+            var syncedSecondary = true;
+
+            sync1.owlCarousel({
+                items: 1,
+                slideSpeed: 2000,
+                nav: false,
+                autoplay: true,
+                dots: false,
+                loop: true,
+                responsiveRefreshRate: 200,
+            }).on('changed.owl.carousel', syncPosition);
+
+            sync2.on('initialized.owl.carousel', function () {
+                sync2.find(".owl-item").eq(0).addClass("current");
+            })
+                .owlCarousel({
+                    items: slidesPerPage,
+                    dots: false,
+                    nav: false,
+                    smartSpeed: 200,
+                    autoplay: true,
+                    slideSpeed: 500,
+                    slideBy: slidesPerPage,
+                    responsiveRefreshRate: 100
+                }).on('changed.owl.carousel', syncPosition2);
+
+            function syncPosition(el) {
+                var count = el.item.count - 1;
+                var current = Math.round(el.item.index - (el.item.count / 2) - .5);
+
+                if (current < 0) {
+                    current = count;
+                }
+                if (current > count) {
+                    current = 0;
+                }
+
+                sync2
+                    .find(".owl-item")
+                    .removeClass("current")
+                    .eq(current)
+                    .addClass("current");
+                var onscreen = sync2.find('.owl-item.active').length - 1;
+                var start = sync2.find('.owl-item.active').first().index();
+                var end = sync2.find('.owl-item.active').last().index();
+
+                if (current > end) {
+                    sync2.data('owl.carousel').to(current, 100, true);
+                }
+                if (current < start) {
+                    sync2.data('owl.carousel').to(current - onscreen, 100, true);
+                }
+
+
+                //$('.list-product-all').owlCarousel({
+                //    loop: false,
+                //    margin: 10,
+                //    nav: true,
+                //    responsive: {
+                //        0: {
+                //            items: 1
+                //        },
+                //        600: {
+                //            items: 3
+                //        },
+                //        1000: {
+                //            items: 5
+                //        }
+                //    }
+                //})
+            }
+
+            function syncPosition2(el) {
+                if (syncedSecondary) {
+                    var number = el.item.index;
+                    sync1.data('owl.carousel').to(number, 100, true);
+                }
+            }
+
+            sync2.on("click", ".owl-item", function (e) {
+                e.preventDefault();
+                var number = $(this).index();
+                sync1.data('owl.carousel').to(number, 300, true);
+            });
+
+            $('.nav_slider_left').click(function () {
+                sync1.trigger('prev.owl.carousel', [300]);
+            })
+
+            $('.nav_slider_right').click(function () {
+                sync1.trigger('next.owl.carousel');
+            })
+        });
+
+    </script>
+
+}

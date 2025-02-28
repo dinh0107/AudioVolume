@@ -1,0 +1,48 @@
+﻿@model IEnumerable<AudioVolume.Models.ShowRoom>
+
+<table class="list_table tablecenter mb-4" id="list-showroom">
+    <tr>
+        <th>STT</th>
+        <th>Tên Showroom</th>
+        <th>Chi tiết</th>
+        <th style="width: 100px"></th>
+    </tr>
+    <tbody id="sortable-cat">
+        @foreach (var showroom in Model)
+        {
+            <tr data-id="@showroom.Id" style="background: #ededed;">
+                <td style="width: 120px;">
+                    @showroom.Sort
+                </td>
+                
+                <td class="left"><strong>@showroom.Name</strong></td>
+                <td>@Html.Raw(showroom.Body)</td>
+                <td>
+                    @Html.ActionLink("Sửa", "UpdateShowroom", new { showroomId = showroom.Id }) -
+                    <a href="javascript:;" onclick="deleteShowroom('@showroom.Id')" style="color: red">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    function deleteShowroom(id) {
+        if (confirm("Bạn có chắc chắn xóa showroom này không?")) {
+            $.post("/Article/DeleteShowroom", { showroomId: id }, function (data) {
+                if (data) {
+                    $.toast({
+                        text: 'Đang xóa showroom',
+                        position: 'bottom-right',
+                        icon: 'success',
+                    })
+                    $("tr[data-id='" + id + "']").fadeOut();
+                } else {
+                    $.toast({
+                        text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                        icon: 'error',
+                    })
+                }
+            });
+        }
+    }
+</script>

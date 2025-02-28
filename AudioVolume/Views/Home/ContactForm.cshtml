@@ -1,0 +1,28 @@
+﻿@model AudioVolume.Models.Contact
+
+<div class="form-group">
+    <div class="frm_comment">
+        @Html.TextBoxFor(a => a.Fullname , new { @placeholder = "Nhập họ tên" })
+        <small>@Html.ValidationMessageFor(a => a.Fullname)</small>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="frm_comment">
+        @Html.TextBoxFor(a => a.Email, new { @placeholder = "Email" })
+        <small>@Html.ValidationMessageFor(a => a.Email)</small>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="frm_comment">
+        @Html.TextBoxFor(a => a.Mobile, new { @placeholder = "Nhập số điện thoại" })
+        <small>@Html.ValidationMessageFor(a => a.Mobile)</small>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="frm_comment">
+        @Html.TextAreaFor(a => a.Body, new { @placeholder = "Nhập nội dung" })
+    </div>
+</div>

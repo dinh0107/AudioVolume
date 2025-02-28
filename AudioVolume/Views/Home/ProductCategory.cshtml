@@ -1,0 +1,157 @@
+﻿@model AudioVolume.ViewModel.CategoryProductViewModel
+@using PagedList.Mvc
+@{
+    ViewBag.Title = Model.Category.TitleMeta ?? Model.Category.CategoryName;
+    ViewBag.Description = Model.Category.DescriptionMeta;
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("ProductCategory", "Home", new { url = Model.Category.Url });
+    var fp = Model.Products.FirstOrDefault(a => a.Image != null);
+    if (fp != null)
+    {
+        ViewBag.ImageShare = Request.Url?.GetLeftPart(UriPartial.Authority) + Path.Combine("/images/products/", fp.Image);
+    }
+
+    if (Model.EndCount > Model.Products.TotalItemCount)
+    {
+        Model.EndCount = Model.Products.TotalItemCount;
+    }
+    if (Model.Products.HasPreviousPage)
+    {
+        var prev = Model.Products.PageNumber - 1;
+        ViewBag.Prev = ViewBag.Canonical + "/page/" + prev;
+    }
+    if (Model.Products.HasNextPage)
+    {
+        var next = Model.Products.PageNumber + 1;
+        ViewBag.Next = ViewBag.Canonical + "/page/" + next;
+    }
+}
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="breadcrumb-main">
+                <ol class="breadcrumb">
+                    <li itemprop="itemListElement" style="display: inline-block;">
+                        <a itemprop="item" href="/">
+                            <span itemprop="name">Trang Chủ</span>
+                        </a>
+                    </li>
+                    <i class="fa-solid fa-angle-right"></i>
+                    <li style="display: inline-block;">
+                        <a href="">
+                            <span>@Model.Category.CategoryName</span>
+                        </a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="container">
+        <div class="row filter-content">
+            <h2 class="title-catalog-filter" style="display: none;">@Model.Category.CategoryName</h2>
+            <div class="filter-all-logo">
+                <ul>
+                    @foreach (var item in Model.Brands)
+                    {
+                        <li id="filter-loa-keo-di-dong-acnos" data-group="2" data="loa-keo-di-dong-acnos">
+                            <a href="">
+                                <img src="@Path.Combine("/images/brand/", item.Image)">
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        @if (Model.HotProduct.Any())
+        {
+            <div class="row">
+                <div class="product_hot_top" style="margin-top:10px; margin-bottom:10px">
+                    <div class="header_product_hot_top">
+                        @if (Model.Category.ImageSale != null)
+                        {
+                            <img src="@Path.Combine("/images/productCategory/",Model.Category.ImageSale)" alt="hot-prodcut">
+                        }
+                    </div>
+                    <div class="content_product_hot_top" style="border-color: #ca3108;background-color: #ca3108">
+                        <div style="display: block;position: relative;">
+                            <ul class="list-product-all owl-carousel" id="product_slider_catalog">
+                                @foreach (var item in Model.HotProduct)
+                                {
+                                    @Html.Partial("_ProductItem", item)
+                                }
+                            </ul>
+                            <div class=" nav_product_slider_catalog" id="nav_product_slider_catalog_left">
+                                <i class="fa-solid fa-angle-left"></i>
+                            </div>
+                            <div class=" nav_product_slider_catalog" id="nav_product_slider_catalog_right">
+                                <i class="fa-solid fa-angle-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.Products.Any())
+        {
+            <div class="row" style="position: relative;">
+                <ul class="list-product-all" id="list-product-all">
+                    @foreach (var item in Model.Products)
+                    {
+                        @Html.Partial("_ProductItem", item)
+                    }
+                    @if (Model.Products.PageCount > 1)
+                    {
+                        @Html.PagedListPager(Model.Products, page => Url.Action("Product", new { page }))
+                    }
+                </ul>
+            </div>
+        }
+        <div class="row">
+            <div class="content-mota-catalog">
+                <div class="content-all pg-details" id="pg_details">
+                    @Html.Raw(Model.Category.Body)
+                </div>
+                <p class="view-all-content">Đọc thêm mô tả</p>
+
+                <script>
+                    $(document).ready(function () {
+                        $(".content-youtube a").on('click', function (e) {
+                            e.preventDefault();
+                            var link = $(this).attr('href');
+                            $(this).parent().html('<div class="embed-responsive embed-responsive-16by9"><iframe width="100%" height="457" src="' + link + '?autoplay=1&loop=1&rel=0&wmode=transparent" frameborder="0" allow="autoplay;encrypted-media" allowfullscreen=""></iframe></div>')
+                            $(this).remove();
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts{
+    <script>
+        $('.view-all-content').on('click', function () {
+            $('#pg_details').css('max-height', 'none');
+        });
+        var product_slider = $("#product_slider_catalog");
+        product_slider.owlCarousel({
+            nav: false,
+            loop: true,
+            autoplay: true,
+            autoplayTimeout: 3000,
+            autoplayHoverPause: true,
+            margin: 10,
+            responsive: {
+                0: {
+                    items: 2,
+                },
+                600: {
+                    items: 2,
+                },
+                1000: {
+                    items: 5,
+                }
+            }
+        });
+    </script>
+}

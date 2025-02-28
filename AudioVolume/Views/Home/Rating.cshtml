@@ -1,0 +1,36 @@
+﻿@model AudioVolume.Models.ProductRating
+
+@Html.HiddenFor(a => a.Rate, new { @id = "rating-value" })
+<div class="rank mb-3">
+    <div id="rating">
+        <i class="fa-solid fa-star" data-value="5"></i>
+        <i class="fa-solid fa-star" data-value="4"></i>
+        <i class="fa-solid fa-star" data-value="3"></i>
+        <i class="fa-solid fa-star" data-value="2"></i>
+        <i class="fa-solid fa-star" data-value="1"></i>
+    </div>
+    @*<input type="hidden" name="rating" id="rating-value">
+    *@
+
+</div>
+<div class="form-group">
+    <div class="frm_comment">
+        @Html.TextAreaFor(a => a.Body, new { @placeholder = "Nhập đánh giá về sản phẩm" })
+        <a href="javascript:void(0);" class="iconChoosefile" id="iconChoosefile"><i class="fa-solid fa-camera" aria-hidden="true"></i> Gửi ảnh chụp thực tế</a>
+    </div>
+    @*<input type="file" id="imageUpload" accept="image/*" style="display: none;" name="Image">*@
+
+    @Html.TextBoxFor(a => a.Image , new { @type = "file" ,@id = "imageUpload" , @accept = "image/*" })
+    <span class="error" id="message-error"></span>
+</div>
+<ul class="lst_pre_img" id="lst_pre_img"></ul>
+<div class="from-half">
+    <div class="form-group">
+        @Html.TextBoxFor(a => a.Name, new { @placeholder = "Tên của bạn" })
+        <small class="error">@Html.ValidationMessageFor(a => a.Name)</small>
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(a => a.Phone, new { @placeholder = "Số điện thoại" })
+        <small class="error">@Html.ValidationMessageFor(a => a.Phone)</small>
+    </div>
+</div>

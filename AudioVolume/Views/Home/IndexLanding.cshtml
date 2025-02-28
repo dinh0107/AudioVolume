@@ -1,0 +1,209 @@
+﻿@model AudioVolume.ViewModel.HomeViewModel
+@using AudioVolume.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+}
+
+<section class="banner-landing">
+    <div class="container">
+        <div class="box-booking">
+            <form id="bookingForm">
+                <div class="title-section-landing">Đặt xe trực tuyến</div>
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                <button type="button" class="btn-reverse">
+                    <img src="~/Content/images/img-main/reverse.png" />
+                </button>
+                <div class="form-group">
+                    @Html.LabelFor(a => a.Contact.From)
+                    <div class="input-group">
+                        <img src="~/Content/images/img-main/user.png" alt="From" />
+                        @Html.TextBoxFor(a => a.Contact.From, new { @class = "form-control", @placeholder = "Nhập điểm đón" })
+                    </div>
+                    @Html.ValidationMessageFor(a => a.Contact.From)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(a => a.Contact.To)
+                    <div class="input-group">
+                        <img src="~/Content/images/img-main/location.png" alt="To" />
+                        @Html.TextBoxFor(a => a.Contact.To, new { @class = "form-control", @placeholder = "Nhập điểm đến" })
+                    </div>
+                    @Html.ValidationMessageFor(a => a.Contact.To)
+                </div>
+                <div class="way">
+                    <div class="button-wrap">
+                        <div class="button-bg">
+                            <div class="button-switch"></div>
+                        </div>
+                    </div>
+                    <span>2 chiều</span>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(a => a.FromDate)
+                    <div class="input-group">
+                        <img src="~/Content/images/img-main/from-date.png" alt="FromDate" />
+                        @Html.TextBoxFor(a => a.FromDate, new { @class = "form-control", @type = "datetime-local" })
+                    </div>
+                    @Html.ValidationMessageFor(a => a.FromDate)
+                </div>
+                <div class="form-group" id="toDate">
+                    @Html.LabelFor(a => a.ToDate)
+                    <div class="input-group">
+                        <img src="~/Content/images/img-main/to-date.png" alt="ToDate" />
+                        @Html.TextBoxFor(a => a.ToDate, new { @class = "form-control", @type = "datetime-local" })
+                    </div>
+                    @Html.ValidationMessageFor(a => a.ToDate)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(a => a.Contact.Mobile)
+                    <div class="input-group">
+                        <img src="~/Content/images/img-main/phone.png" alt="Mobile" />
+                        @Html.TextBoxFor(a => a.Contact.Mobile, new { @class = "form-control", @placeholder = "Số điện thoại" })
+                    </div>
+                    @Html.ValidationMessageFor(a => a.Contact.Mobile)
+                </div>
+                <button type="submit" class="btn-booking">Đặt xe</button>
+            </form>
+        </div>
+    </div>
+</section>
+<section class="introduce-landing">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 col-md-6 order-lg-0 order-md-0 order-1">
+                <div class="sub-title">Về chúng tôi</div>
+                <h1 class="title-section-landing text-start">Thuê xe Nam Anh</h1>
+                @if (config.AboutText != null)
+                {
+                    <div class="content-detail">@Html.Raw(config.AboutText)</div>
+                }
+                @*<a href="@config.AboutUrl" class="btn-intro">
+                        Xem thêm
+                        <i class="fa-solid fa-circle-chevron-right"></i>
+                    </a>*@
+            </div>
+            <div class="col-lg-7 col-md-6 order-lg-1 order-md-1 order-0">
+                @if (config.AboutImage != null)
+                {
+                    <img data-src="@Path.Combine("/images/configs/", config.AboutImage)" src="~/Content/images/img-main/base64.gif" alt="Ảnh giới thiệu" class="intro-landing-img lazyload offset-lg-1" />
+                }
+            </div>
+        </div>
+    </div>
+</section>
+@if (Model.Banners.Any(a => a.GroupId == 1))
+{
+    var i = 1;
+    <section class="benefit">
+        <div class="container">
+            <div class="title-section-landing">Lợi ích đặt xe Nam Anh</div>
+            <div class="row">
+                @foreach (var item in Model.Banners.Where(a => a.GroupId == 1))
+                {
+                    <div class="col-lg-3 col-md-3 col-6">
+                        <div class="benefit-item">
+                            @if (item.Image != null)
+                            {
+                                <img data-src="@Path.Combine("/images/banners/", item.Image)" src="~/Content/images/img-main/base64.gif" alt="@item.BannerName" class="lazyload icon" />
+                            }
+                            <div class="benefit-name">@Html.Raw(item.BannerName)</div>
+                            <div class="desc">@item.Slogan</div>
+                            @if (i < 4)
+                            {
+                                <div class="line">
+                                    <img src="~/Content/images/img-main/line-red.png" alt="Line" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    i++;
+                }
+            </div>
+        </div>
+    </section>
+}
+@if (config.Price != null)
+{
+    <section class="price" id="priceTable">
+        <div class="container">
+            <div class="title-section-landing">Bảng giá dịch vụ thuê xe</div>
+            <div class="table-responsive">
+                @Html.Raw(config.Price)
+            </div>
+            <div class="price-info-landing">
+                <span>Giá đã bao gồm: Xăng dầu, cầu phà, bến bãi</span><br />
+                <span>Chưa bao gồm: Thuế VAT 10%, đường cao tốc BOT (nếu du lịch 1 ngày)</span>
+            </div>
+        </div>
+    </section>
+}
+<section class="hotline-landing">
+    <a href="tel:@config.Hotline">
+        <span>Đặt xe ngay</span>
+        <i class="fa-solid fa-circle-chevron-right"></i>
+    </a>
+    <div class="text-hotline">@config.Hotline</div>
+</section>
+@if (Model.Banners.Any(a => a.GroupId == 2))
+{
+    var i = 1;
+    <section class="gallery">
+        <div class="container">
+            <div class="gallery-list">
+                @foreach (var item in Model.Banners.Where(a => a.GroupId == 2))
+                {
+                    if (item.Image != null)
+                    {
+                        <div class="@Html.Raw("image" + i)">
+                            <div class="image" style="background-image: url('@Path.Combine("/images/banners/", item.Image)')"></div>
+                        </div>
+                    }
+                    i++;
+                }
+            </div>
+        </div>
+    </section>
+}
+@if (Model.Banners.Any(a => a.GroupId == 3 && a.ListImage != null))
+{
+    var banner = Model.Banners.FirstOrDefault(a => a.GroupId == 3 && a.ListImage != null);
+    var arrImg = banner.ListImage.Split(',');
+    <section class="feedback">
+        <div class="container">
+            <div class="title-section-landing">Phản hồi của khách hàng</div>
+            <div class="feedback-list">
+                @foreach (var img in arrImg)
+                {
+                    <div class="feedback-image">
+                        <img data-src="@Path.Combine("/images/banners/", img)" src="~/Content/images/img-main/base64.gif" alt="@banner.BannerName" class="lazyload" />
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+@if (Model.Banners.Any(a => a.GroupId == 4))
+{
+    <section class="numbers">
+        <div class="container">
+            <div class="row">
+                @foreach (var item in Model.Banners.Where(a => a.GroupId == 4))
+                {
+                    <div class="col-4">
+                        <div class="number-item">
+                            @if (item.Image != null)
+                            {
+                                <div class="number-img">
+                                    <img data-src="@Path.Combine("/images/banners/", item.Image)" src="~/Content/images/img-main/base64.gif" alt="@item.BannerName" class="lazyload" />
+                                </div>
+                            }
+                            <div class="number-name">@item.BannerName</div>
+                            <div class="number">@item.Slogan</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}

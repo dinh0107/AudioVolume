@@ -1,0 +1,127 @@
+﻿@model AudioVolume.ViewModel.FooterViewModel
+@using AudioVolume.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+
+
+}
+
+<section class="footer_new_new ">
+    <div class="container">
+        
+        @if (Model.ShowRooms.Any())
+        {
+            var number = 1;
+            <div class="footer_showroom p-3">
+                <p class="footer_title">Hệ Thống Của Chúng Tôi</p>
+                <div class="showroom_list">
+                    <ul class="list-showroom-all">
+                        @foreach (var item in Model.ShowRooms)
+                        {
+                            <li data-id="showroom-5" class="item-showroom">
+                                <div class="label-showroom label-group-0">
+                                    <p class="header">
+                                        <span class="text">@item.Name</span>
+                                        <span class="number"><span>@number</span></span>
+                                    </p>
+                                </div>
+                                <div class="content-showroom">
+                                    @Html.Raw(item.Body)
+                                </div>
+                            </li>
+                            number += 1;
+
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="footer_new_showroom">
+                <p class="footer_widget_title">CHI NHÁNH</p>
+                <ul class="nav_list_showroom">
+                    @foreach (var item in Model.ShowRooms)
+                    {
+                        <li data-id="showroom-1" class="item-showroom d-lg-flex d-block">
+                            @Html.Raw(item.Body)
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="footer_line"></div>
+        }
+
+        <div class="footer_more_info">
+            <div class="footer_item link">
+                <p class="title">Giới thiệu</p>
+                <ul>
+                    @foreach (var item in Model.Articles.Where(a => a.ArticleCategory.TypePost == TypePost.Introduce))
+                    {
+                        <li><a href="@Url.Action("ArticleDetail", new {url = item.Url})">@item.Subject</a></li>
+                    }
+                </ul>
+            </div>
+            <div class="footer_item hotline">
+                <p class="title">Tổng đài hỗ trợ</p>
+                <ul>
+                    <li><span>Mua Hàng : </span><a href="tel:@config.Hotline">@config.Hotline</a>8:00 - 21:00 (Miễn Cước)</li>
+                    <li><span>Miền Nam : </span><a href="tel:@config.Hotline2">@config.Hotline2</a>8:00 - 21:00 (Miễn Cước)</li>
+                    <li><span>Miền Bắc : </span><a href="tel:@config.Hotline3">@config.Hotline2</a>(8:00 - 21:00)</li>
+                </ul>
+            </div>
+            <div class="footer_item link">
+                <p class="title">Thông tin chính sách</p>
+                <ul>
+
+                    @foreach (var item in Model.Articles.Where(a => a.ArticleCategory.TypePost == TypePost.Policy))
+                    {
+
+                        <li>
+                            <a href="@Url.Action("ArticleDetail", new {url = item.Url})" target="_blank">
+                                @item.Subject
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+        <div class="footer_new_right_copyright">
+            <p class="txt_copyright">
+                @config.Place
+            </p>
+            <div class="info_security">
+                <p>
+                    <a target="_blank" href="@config.Youtube" rel="nofollow">
+                        <img src="https://hdradio.vn/upload/youtube-hdradio.png" alt="youtube-hdradio">
+                    </a>
+                    <a target="_blank" href="@config.Facebook" rel="nofollow">
+                        <img src="https://hdradio.vn/upload/Facebook-hdradio.png" alt="facebook-hdradio">
+                    </a>
+                    <a target="_blank" href="https://zalo.me/@config.Youtube" rel="nofollow">
+                        <img src="https://hdradio.vn/upload/zalo-hdradio.png" alt="zalo-hdradio">
+                    </a>
+                    <a target="_blank" href="@config.Instagram" rel="nofollow">
+                        <img src="https://hdradio.vn/upload/Instagram-hdradio.png" alt="instagram-hdradio">
+                    </a>
+                </p>
+                <p>
+                    <a target="_blank" href="" rel="nofollow">
+                        <img src="https://hdradio.vn/upload/dathongbao-hdradio.png" alt="dang-ky-bo-cong-thuong">
+                    </a>
+                    <a href="" rel="nofollow"
+                       title="Chung nhan Tin Nhiem Mang" target="_blank">
+                        <img src="https://tinnhiemmang.vn/handle_cert?id=hdradio.vn" alt="Chung nhan Tin Nhiem Mang">
+                    </a></a>
+                    <a target="_blank" href="//www.dmca.com/Protection/Status.aspx?ID=071dd4fe-8208-4fb1-b1b7-922936329ae0"
+                       rel="nofollow" title="DMCA.com Protection Status" class="dmca-badge">
+                        <img src="https://images.dmca.com/Badges/_dmca_premi_badge_5.png?ID=071dd4fe-8208-4fb1-b1b7-922936329ae0"
+                             alt="DMCA.com Protection Status" />
+                    </a>
+                </p>
+                <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"></script>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- BackToTop Button -->
+<!--<a href="javascript:void(0);" id="scroll_go_top" title="Scroll to Top" style="display: none;">Top<span></span></a>
+<a href="javascript:void(0);" id="scroll" title="Scroll to Top" style="display: none;"></a>-->

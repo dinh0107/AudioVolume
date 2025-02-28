@@ -1,0 +1,325 @@
+﻿@model AudioVolume.ViewModel.HeaderViewModel
+    @using AudioVolume.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+}
+<header id="header" class="pg-pc">
+    <div style="max-width:100%">
+        <a style="display: block;width: 100%;" href="">
+            @if (config.AboutImage != null)
+            {
+                <img style="display: block;width: 100%;"
+                     src="@Path.Combine("/images/configs/", config.AboutImage)">
+            }
+        </a>
+    </div>
+    <div class="container no_padding" style="position: relative;">
+        <div class="header-pc">
+            <div class="header_logo">
+                <a href="/">
+                    <img src="@Path.Combine("/images/configs/", config.Image)" alt="logo-header-pc" height="50" />
+                </a>
+            </div>
+            <div class="header_form_search">
+                <form class="search-product-top" id="search-product-top" action="./" method="get">
+                    <input type="text" class="form-control" name="keysearch" id="keysearch" placeholder="Bạn tìm gì..."
+                           autocomplete="off">
+                    <button class="btn_header_search" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+                <div class="review-product-search" id="review-product-search">
+                    <div class="review-product-search-content" id="review-product-search-content">
+                        <p class="header_title">Nhập it nhất 3 ký tự</p>
+                        <div class="close-suggest-search" id="close-suggest-search">Đóng</div>
+                    </div>
+                </div>
+            </div>
+            <div class="header_info_top">
+                <div class="pro_viewed">
+                    <span>Sản phẩm đã xem <i class="fa-sharp fa-solid fa-caret-down"></i></span>
+                    <div class="pro_viewed_content">
+                    </div>
+                </div>
+                <div class="header_hotline">
+                    <a href="tel:@config.Hotline">
+                        <span>@config.Hotline</span>
+                        <span>Miễn phí cước gọi</span>
+                    </a>
+                </div>
+                @*<div class="header_safeoff_month">
+                    <a href="khuyen-mai-moi.html">
+                        <img src="~/Content/images/icon-khuyenmai.png" alt="icon-new-03">
+                        Khuyến Mãi Sốc
+                    </a>
+                </div>*@
+            </div>
+            <style>
+                .dropdown-shop-small-cnt .noProductInCart {
+                    display: block;
+                    width: 100%;
+                    margin: 10px 0;
+                }
+            </style>
+        </div>
+    </div>
+    <div class="header-nav-new hidden-sm hidden-xs hidden-md">
+        <div class="container">
+            <div class="header-nav-new-content">
+                <div class="header-nav-main">
+                    <div class="bar-nav">
+                        <img src="~/Content/images/icon-menu.png" alt="icon-new-04">
+                        Danh Mục Sản Phẩm
+                    </div>
+                    <div class="header-nav-main-content">
+                        <ul class="main-menu-list">
+                            @foreach (var item in Model.ProductCategories.Where(a => a.ParentId == null))
+                            {
+                                <li>
+                                    <div class="main-menu-list-customer">
+                                        @if (item.Image != null)
+                                        {
+                                            <span>
+                                                <img src="@Path.Combine("/images/productCategory/", item.Image)" alt="@item.CategoryName">
+                                            </span>
+                                        }
+
+                                        <ul style="flex-wrap: nowrap; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            <li>
+                                                <strong>
+                                                    <span style="color: #ff0000;">
+                                                        <a style="color: #ff0000;" href="@Url.Action("ProductCategory", new {url = item.Url})"
+                                                           target="_blank">@item.CategoryName</a>
+                                                    </span>
+                                                </strong>
+                                            </li>
+                                            @foreach (var child in Model.ProductCategories.Where(a => a.ParentId == item.Id).Take(3))
+                                            {
+                                                <li><a href="@Url.Action("ProductCategory", new {url = child.Url})" target="_blank">@child.CategoryName</a></li>
+                                            }
+                                        </ul>
+                                        <i class="fa-solid fa-angle-right"></i>
+                                    </div>
+                                    @if (Model.ProductCategories.Any(a => a.ParentId == item.Id))
+                                    {
+                                        <div class="main-menu-content">
+                                            <ul>
+                                                @foreach (var box in Model.ProductCategories.Where(a => a.ParentId == item.Id))
+                                                {
+                                                    <li>
+                                                        <p class="header_title">
+                                                            <a href="@Url.Action("ProductCategory", new {url = box.Url})">
+                                                                @box.CategoryName
+                                                            </a>
+                                                        </p>
+                                                    </li>
+                                                }
+
+                                            </ul>
+                                        </div>
+                                    }
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="header-nav-sub">
+                    <ul>
+                        <li>
+                            <a href="/">
+                                <img src="https://hdradio.vn/img/icon-trangchu.png" alt="icon-new-05">
+                                <span>Trang Chủ</span>
+                            </a>
+                        </li>
+                        @foreach (var item in Model.ArticleCategories)
+                        {
+                            <li>
+                                <a href="@Url.Action("ArticleCategory", new {url = item.Url})">
+                                    @if (item.Image != null)
+                                    {
+                                        <img src="@Path.Combine("/images/articleCategory/", item.Image)" alt="icon-new-01">
+                                    }
+                                    <span>@item.CategoryName</span>
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</header>
+
+<section class="header-mobile pg-mobile" id="header-mobile">
+    <div style="max-width:100%">
+        <a style="display: block;width: 100%;"
+           href="">
+            @if (config.AboutImage != null)
+            {
+                <img style="display: block;width: 100%;"
+                     src="@Path.Combine("/images/configs/", config.AboutImage)">
+            }
+        </a>
+    </div>
+    
+    <div class="header-mobile-content">
+        <div class="logo-mobile">
+            <a href="/">
+                @if (config.Image != null)
+                {
+                    <img class="img-logo" src="@Path.Combine("/images/configs/", config.Image)" alt="logo-header-mobile" height="50" />
+                }
+            </a>
+        </div>
+        <div class="form-search-mobile">
+            <form action="./" method="get">
+                <input type="text" name="keysearch" id="keysearch-mobile" placeholder="Bạn tìm gì..." autocomplete="off">
+                <button class="btn btn-default" type="submit">
+                    <img src="https://hdradio.vn/img/icon-search.svg" alt="icon-search">
+                </button>
+            </form>
+            <div class="review-product-search" id="review-product-search-mobile">
+                <div class="review-product-search-content" id="review-product-search-content-mobile">
+                    <p class="header_title">Nhập it nhất 3 ký tự</p>
+                    <div class="close-suggest-search" id="close-suggest-search-mobile">Đóng</div>
+                </div>
+            </div>
+        </div>
+        <div class="header-mobile-right">
+            <div id='nav_mobile' class="show_nav_mobile">
+                <div class="nav_header">
+                    <img src="https://hdradio.vn/img/icon/icon-menu.png" alt="icon-menu" height="30">
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <style>
+        .header-mobile-content {
+            display: block;
+            width: 100%;
+            padding: 5px 5px;
+            margin-bottom: 5px;
+            position: relative;
+            margin-top: 0px;
+            background-color: #3c3d41
+        }
+
+            .header-mobile-content .logo-mobile {
+                width: 100px;
+                height: 30px;
+                float: left;
+            }
+
+                .header-mobile-content .logo-mobile a {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                    .header-mobile-content .logo-mobile a img {
+                        height: 100%;
+                        width: 100%;
+                    }
+
+        .form-search-mobile {
+            float: left;
+            width: calc(100% - 140px);
+            margin-left: 5px;
+            display: -webkit-flex;
+            display: -moz-flex;
+            display: -ms-flex;
+            display: -o-flex;
+            display: flex;
+            justify-content: flex-start;
+            flex-flow: row nowrap;
+        }
+
+        .mobile_viewed_icon {
+            width: 70px;
+            margin-left: 5px;
+            border-radius: 3px;
+            display: inline-flex;
+            flex-flow: column nowrap;
+            justify-content: center;
+            border: 1px solid #ffffff;
+            font-size: 9px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .form-search-mobile form {
+            height: 30px;
+            width: 100%;
+            position: relative;
+            z-index: 104;
+        }
+
+            .form-search-mobile form input {
+                width: 100%;
+                height: 100%;
+                box-shadow: none;
+                border: 1px solid #ff6a00;
+                border-radius: 3px;
+                padding: 0 40px 0 10px;
+                line-height: 30px;
+                font-size: 11px;
+            }
+
+            .form-search-mobile form button {
+                height: 30px;
+                width: 30px;
+                position: absolute;
+                top: 0;
+                right: 0;
+                border-radius: 0 3px 3px 0;
+                text-align: center;
+                background: #ff6a00;
+                border: none;
+                box-shadow: none;
+            }
+
+                .form-search-mobile form button img {
+                    height: 14px;
+                    height: 14px;
+                    position: absolute;
+                    top: calc(50% - 7px);
+                    left: calc(50% - 7px);
+                }
+
+        .header-mobile-right {
+            float: right;
+            width: 30px;
+        }
+
+            .header-mobile-right .header_icon_cart {
+                margin: 0 5px;
+            }
+
+                .header-mobile-right .header_icon_cart img {
+                    width: auto;
+                    height: 23px;
+                    margin-top: 5px;
+                }
+
+            .header-mobile-right div.header_icon_cart > span {
+                top: 0;
+            }
+
+            .header-mobile-right div.dropdown-shop-small-cnt {
+                width: 100%;
+                display: none;
+            }
+
+                .header-mobile-right div.dropdown-shop-small-cnt .btn-cart {
+                    width: auto;
+                }
+    </style>
+</section>
+<script>
+
+</script>

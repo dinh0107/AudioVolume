@@ -1,0 +1,73 @@
+﻿@model AudioVolume.ViewModel.ArticleDetailViewModel
+@{
+    ViewBag.Title = Model.Article.TitleMeta ?? Model.Article.Subject;
+    ViewBag.Description = Model.Article.DescriptionMeta ?? Model.Article.Description;
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("ArticleDetail", new { url = Model.Article.Url });
+    if (Model.Article.Image != null)
+    {
+        ViewBag.ImageShare = Request.Url?.GetLeftPart(UriPartial.Authority) + Path.Combine("/images/articles/", Model.Article.Image);
+    }
+}
+<div id="page_news" class="mt-3">
+    <div class="container">
+        <div class="row">
+            <div class="main_content">
+                <div class="pg-row">
+                    <div class="pg-col-7p plr20 pl-0 pg-order-1">
+                        <div class="css-new">
+                            <h1 class="pg-title">
+                                <a href="">
+                                    @Model.Article.Subject
+                                </a>
+                            </h1>
+                            <div class="pg-details mt-3" id="pg_details">
+                                @Html.Raw(Model.Article.Body)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pg-col-3p pg-order-2">
+                        <div class="pg-sticky">
+                            <div class="sidebar-new-style">
+                                <div class="header_title">
+                                    Tin tức mới nhất
+                                </div>
+                                <div class="home_new_top">
+                                    <ul>
+                                        @foreach (var item in Model.Articles)
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("ArticleDetail", new {url = item.Url})">
+                                                    <span>@item.Subject</span>
+                                                    <span class="view-detail">
+                                                        @item.CreateDate.ToString("dd-MM-yyyy")
+                                                    </span>
+                                                </a>
+                                                <figure>
+                                                    <a href="@Url.Action("ArticleDetail", new {url = item.Url})">
+                                                        @if (item.Image != null)
+                                                        {
+                                                            <img src="@Path.Combine("/images/articles/", item.Image)" alt="@item.Subject">
+                                                        }
+                                                    </a>
+                                                </figure>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+@section scripts {
+    <script src="~/Scripts/jquery.toc.js"></script>
+    <script>
+        $("#toc").toc();
+    </script>
+}

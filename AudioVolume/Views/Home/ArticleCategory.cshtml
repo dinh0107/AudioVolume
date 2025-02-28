@@ -1,0 +1,104 @@
+﻿@model AudioVolume.ViewModel.ArticleCategoryViewModel
+@using PagedList.Mvc
+@{
+    ViewBag.Title = Model.Category.TitleMeta ?? Model.Category.CategoryName;
+    ViewBag.Description = Model.Category.DescriptionMeta ?? Model.Category.Description;
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("ArticleCategory", "Home", new { url = Model.Category.Url });
+    var fa = Model.Articles.FirstOrDefault(a => a.Image != null);
+    if (Model.Category.Image != null)
+    {
+        ViewBag.ImageShare = Request.Url?.GetLeftPart(UriPartial.Authority) + Path.Combine("/images/articleCategory/", Model.Category.Image);
+    }
+    else if (fa != null)
+    {
+        ViewBag.ImageShare = Request.Url?.GetLeftPart(UriPartial.Authority) + Path.Combine("/images/articles/", fa.Image);
+    }
+    if (Model.Articles.HasPreviousPage)
+    {
+        var prev = Model.Articles.PageNumber - 1;
+        ViewBag.Prev = ViewBag.Canonical + "/page/" + prev;
+    }
+    if (Model.Articles.HasNextPage)
+    {
+        var next = Model.Articles.PageNumber + 1;
+        ViewBag.Next = ViewBag.Canonical + "/page/" + next;
+    }
+}
+<div id="page_news" class="mt-3">
+    <div class="main_content">
+        <div class="container">
+            <div class="pg-row">
+                <div class="pg-col-7p mr20 ">
+                    <div class="box-shadow">
+                        <div class="header_title">
+                            Tin Tức Mới Nhất
+                        </div>
+                        <div class="pg_news_list ">
+                            <ul>
+                                @foreach (var item in Model.Articles)
+                                {
+                                    <li>
+                                        <figure>
+                                            <a href="@Url.Action("ArticleDetail", new {url = item.Url})">
+                                                @if (item.Image != null)
+                                                {
+                                                    <img src="@Path.Combine("/images/articles/", item.Image)"
+                                                         alt="@item.Subject" />
+                                                }
+                                            </a>
+                                        </figure>
+                                        <div>
+                                            <h2>
+                                                <a href="@Url.Action("ArticleDetail", new {url = item.Url})">
+                                                    @item.Subject
+                                                </a>
+                                            </h2>
+                                        </div>
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <p class="pg_news_view_more">
+                        <a href="#"><span>Xem thêm</span></a>
+                    </p> -->
+                </div>
+                <div class="pg-col-3p">
+                    <div class="sidebar-new-style">
+                        <div class="header_title">
+                            Sản Phẩm Mới Nhất
+                        </div>
+                        <div class="pg_news_sidebar_product">
+                            <ul>
+                                @foreach (var item in Model.Products)
+                                {
+                                    <li>
+                                        <figure>
+                                            <a href="@Url.Action("ProductDetail", new {url = item.Url})">
+                                                @if (item.Image != null)
+                                                {
+                                                    <img src="@Path.Combine("/images/products/", item.Image)" alt="@item.Name">
+                                                }
+                                            </a>
+                                        </figure>
+                                        <div>
+                                            <h3>
+                                                <a href="@Url.Action("ProductDetail", new {url = item.Url})">
+                                                    @item.Name
+                                                </a>
+                                            </h3>
+                                            @*<p class="price price_new"><strong>Giá bán: </strong><span>19.827.000<sup>đ</sup></span></p>
+                                            <p class="price price_old"><strong>Giá cũ: </strong><span>22.030.000<sup>đ</sup></span></p>*@
+                                        </div>
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
