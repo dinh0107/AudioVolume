@@ -41,7 +41,5 @@ namespace AudioVolume.Models
         Introduce,
         [Display(Name = "Chính sách")]
         Policy,
-        [Display(Name = "Đối tác")]
-        Partner,
     }
 }

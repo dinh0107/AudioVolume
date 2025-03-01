@@ -190,7 +190,7 @@
             </div>
         </div>
         <div class="header-mobile-right">
-            <div id='nav_mobile' class="show_nav_mobile">
+            <div id='nav_mobile' class="show_nav_mobile" onclick="openBar()">
                 <div class="nav_header">
                     <img src="https://hdradio.vn/img/icon/icon-menu.png" alt="icon-menu" height="30">
                 </div>
@@ -320,6 +320,48 @@
                 }
     </style>
 </section>
-<script>
-
-</script>
+<section class="menu-mb">
+    <ul class="ul-reset nav-mb">
+        <li>
+            <a href="/">Trang chủ</a>
+        </li>
+        @if (Model.ProductCategories.Any(a => a.ParentId == null))
+        {
+            foreach (var item in Model.ProductCategories.Where(a => a.ParentId == null))
+            {
+                <li>
+                    <a href="@Url.Action("ProductCategory", "Home", new { url = item.Url })">@item.CategoryName</a>
+                    @if (Model.ProductCategories.Any(a => a.ParentId == item.Id))
+                    {
+                        <div class="expand-bar"></div>
+                        <div class="sub-nav-mb">
+                            @foreach (var child in Model.ProductCategories.Where(a => a.ParentId == item.Id))
+                            {
+                                <a href="@Url.Action("ProductCategory", "Home", new { url = child.Url })">@child.CategoryName</a>
+                            }
+                        </div>
+                    }
+                </li>
+            }
+        }
+        @if (Model.ArticleCategories.Any(a => a.ParentId == null))
+        {
+            foreach (var item in Model.ArticleCategories.Where(a => a.ParentId == null))
+            {
+                <li>
+                    <a href="@Url.Action("ArticleCategory", "Home", new { url = item.Url })">@item.CategoryName</a>
+                    @if (Model.ArticleCategories.Any(a => a.ParentId == item.Id))
+                    {
+                        <div class="expand-bar"></div>
+                        <div class="sub-nav-mb">
+                            @foreach (var child in Model.ArticleCategories.Where(a => a.ParentId == item.Id))
+                            {
+                                <a href="@Url.Action("ArticleCategory", "Home", new { url = child.Url })">@child.CategoryName</a>
+                            }
+                        </div>
+                    }
+                </li>
+            }
+        }
+    </ul>
+</section>

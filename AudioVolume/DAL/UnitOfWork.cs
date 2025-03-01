@@ -13,12 +13,8 @@ namespace AudioVolume.DAL
         private GenericRepository<Banner> _bannerRepository;
         private GenericRepository<ConfigSite> _configRepository;
         private GenericRepository<Contact> _contactRepository;
-        private GenericRepository<Customer> _customerRepository;
-        private GenericRepository<Introduce> _introduceRepository;
         private GenericRepository<Product> _productRepository;
         private GenericRepository<ProductCategory> _productCategoryRepository;
-        private GenericRepository<Trip> _tripRepository;
-        private GenericRepository<Voucher> _voucherRepository;
         private GenericRepository<Brand> _brandRepository;
         private GenericRepository<ProductOption> _productOptionRepository;
         private GenericRepository<ProductInfo> _productInfoRepository;
@@ -48,18 +44,10 @@ namespace AudioVolume.DAL
             _configRepository ?? (_configRepository = new GenericRepository<ConfigSite>(_context));
         public GenericRepository<Contact> ContactRepository =>
             _contactRepository ?? (_contactRepository = new GenericRepository<Contact>(_context));
-        public GenericRepository<Customer> CustomerRepository =>
-            _customerRepository ?? (_customerRepository = new GenericRepository<Customer>(_context));
-        public GenericRepository<Introduce> IntroduceRepository =>
-            _introduceRepository ?? (_introduceRepository = new GenericRepository<Introduce>(_context));
         public GenericRepository<Product> ProductRepository =>
             _productRepository ?? (_productRepository = new GenericRepository<Product>(_context));
         public GenericRepository<ProductCategory> ProductCategoryRepository =>
             _productCategoryRepository ?? (_productCategoryRepository = new GenericRepository<ProductCategory>(_context));
-        public GenericRepository<Trip> TripRepository =>
-            _tripRepository ?? (_tripRepository = new GenericRepository<Trip>(_context));
-        public GenericRepository<Voucher> VoucherRepository =>
-            _voucherRepository ?? (_voucherRepository = new GenericRepository<Voucher>(_context));
 
         public void Save()
         {

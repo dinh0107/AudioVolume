@@ -72,11 +72,8 @@
                             <tr>
                                 <th style="width: 100px">Ngày gửi</th>
                                 <th style="width: 150px">Số điện thoại</th>
-                                <th>Điểm đi</th>
-                                <th>Điểm đến</th>
-                                <th>Ngày đi</th>
-                                <th>Ngày về</th>
-                                <th>Trạng thái</th>
+                                <th>Email</th>
+                                <th>Tên sản phẩm</th>
                                 <th style="width: 60px"></th>
                             </tr>
                         </thead>
@@ -90,23 +87,8 @@
                                             <strong>@contact.Mobile</strong>
                                         </a>
                                     </td>
-                                    <td>@contact.From</td>
-                                    <td>@contact.To</td>
-                                    <td>@contact.FromDate.ToString("dd/MM/yyyy HH:mm")</td>
-                                    <td>
-                                        @if (contact.ToDate != null)
-                                        {
-                                            var toDate = Convert.ToDateTime(contact.ToDate).ToString("dd/MM/yyyy HH:mm");
-                                            <span>@toDate</span>
-                                        }
-                                    </td>
-                                    <td>
-                                        <select id="statusContact" onchange="updateStatus(@contact.Id, this.value)" style="width: 150px;">
-                                            <option value="0" @if (contact.StatusContact == StatusContact.Contact) { @Html.Raw("selected") }>Liên hệ</option>
-                                            <option value="1" @if (contact.StatusContact == StatusContact.Latch) { @Html.Raw("selected") }>Chốt</option>
-                                            <option value="2" @if (contact.StatusContact == StatusContact.Fail) { @Html.Raw("selected") }>Hủy</option>
-                                        </select>
-                                    </td>
+                                    <td>@contact.Email</td>
+                                    <td>@contact.ProductName</td>
                                     <td class="action-col"><a href="javascript:;" onclick="deletecontact('@contact.Id')" style="color: red">Xóa</a></td>
                                 </tr>
                             }

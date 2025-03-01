@@ -107,7 +107,6 @@ namespace AudioVolume.ViewModel
 
     public class IntroduceViewModel
     {
-        public Introduce Introduce { get; set; }
         public Banner Banner { get; set; }
         public IEnumerable<Banner> Banners { get; set; }
     }

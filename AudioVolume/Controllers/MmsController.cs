@@ -66,8 +66,6 @@ namespace AudioVolume.Controllers
                 Contacts = _unitOfWork.ContactRepository.GetQuery().Count(),
                 Banners = _unitOfWork.BannerRepository.GetQuery().Count(),
                 Products = _unitOfWork.ProductRepository.GetQuery().Count(),
-                Customers = _unitOfWork.CustomerRepository.GetQuery().Count(),
-                Trips = _unitOfWork.TripRepository.GetQuery().Count()
             };
             return View(model);
         }
@@ -277,59 +275,6 @@ namespace AudioVolume.Controllers
         }
         #endregion
 
-        #region Introduce
-        public ActionResult Introduce(string result = "")
-        {
-            ViewBag.Result = result;
-            var introduce = _unitOfWork.IntroduceRepository.Get().FirstOrDefault();
-            return View(introduce);
-        }
-        [HttpPost, ValidateInput(false)]
-        public ActionResult Introduce(Introduce model, FormCollection fc)
-        {
-            var introduce = _unitOfWork.IntroduceRepository.Get().FirstOrDefault();
-            if (introduce == null)
-            {
-                _unitOfWork.IntroduceRepository.Insert(model);
-            }
-            else
-            {
-                for (var i = 0; i < Request.Files.Count; i++)
-                {
-                    if (Request.Files[i] == null || Request.Files[i].ContentLength <= 0) continue;
-                    if (!HtmlHelpers.CheckFileExt(Request.Files[i].FileName, "jpg|jpeg|png|gif")) continue;
-                    if (Request.Files[i].ContentLength > 1024 * 1024 * 4) continue;
-
-                    var imgFileName = HtmlHelpers.ConvertToUnSign(null, Path.GetFileNameWithoutExtension(Request.Files[i].FileName)) +
-                        "-" + DateTime.Now.Millisecond + Path.GetExtension(Request.Files[i].FileName);
-                    var imgPath = "/images/introduces/" + DateTime.Now.ToString("yyyy/MM/dd");
-                    HtmlHelpers.CreateFolder(Server.MapPath(imgPath));
-
-                    var imgFile = DateTime.Now.ToString("yyyy/MM/dd") + "/" + imgFileName;
-
-                    var newImage = Image.FromStream(Request.Files[i].InputStream);
-                    var fixSizeImage = HtmlHelpers.FixedSize(newImage, 1000, 1000, false);
-                    HtmlHelpers.SaveJpeg(Server.MapPath(Path.Combine(imgPath, imgFileName)), fixSizeImage, 90);
-
-                    if (Request.Files.Keys[i] == "Image")
-                    {
-                        introduce.Image = imgFile;
-                    }
-                }
-
-                introduce.AboutText = model.AboutText;
-                introduce.StaffText = model.StaffText;
-                introduce.FeedbackText = model.FeedbackText;
-                introduce.TitleMeta = model.TitleMeta;
-                introduce.DescriptionMeta = model.DescriptionMeta;
-
-                _unitOfWork.Save();
-
-                return RedirectToAction("Introduce", "Mms", new { result = "success" });
-            }
-            return View("Introduce", model);
-        }
-        #endregion
 
         protected override void Dispose(bool disposing)
         {

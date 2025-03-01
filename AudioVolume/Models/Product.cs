@@ -35,7 +35,7 @@ namespace AudioVolume.Models
         public string TitleMeta { get; set; }
         [Display(Name = "Thẻ mô tả"), StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), UIHint("TextArea")]
         public string DescriptionMeta { get; set; }
-        [Display(Name = "Phản hồi"), UIHint("UploadMultiFile")]
+        [Display(Name = "Danh sách ảnh"), UIHint("UploadMultiFile")]
         public string Feedback { get; set; }
         [Display(Name = "Danh mục sản phẩm"), Required(ErrorMessage = "Hãy chọn danh mục sản phẩm")]
         public int ProductCategoryId { get; set; }
@@ -132,62 +132,6 @@ namespace AudioVolume.Models
             CreateDate = DateTime.Now;
         }
     }
-    public class ProductOption
-    {
-        public int Id { get; set; }
-
-        [Required]
-        [Display(Name = "Tên Option")]
-        public string Name { get; set; }
-
-        [Required]
-        [Display(Name = "Giá"), DisplayFormat(DataFormatString = "{0:N0}")]
-        public decimal Price { get; set; }
-
-        public int ProductId { get; set; }
-        [ForeignKey("ProductId")]
-        public virtual Product Product { get; set; }
-    }
-    public class ProductInfo
-    {
-        public int Id { get; set; }
-
-        [Required]
-        [Display(Name = "Tiêu đề")]
-        public string Name { get; set; }
-
-        [Required]
-        [Display(Name = "Nội dung")]
-        public decimal Body { get; set; }
-
-        public int ProductId { get; set; }
-        [ForeignKey("ProductId")]
-        public virtual Product Product { get; set; }
-    }
-    public class ProductRating
-    {
-        public int Id { get; set; }
-        public int Rate { get; set; }
-        [Required]
-        [Display(Name = "Nội dung")]
-        public string Body { get; set; }
-        [Required]
-        [Display(Name = "Tên của bạn")]
-        public string Name { get; set; }
-        [Display(Name = "Ảnh"), StringLength(500)]
-        public string Image { get; set; }
-        [Required]
-        [Display(Name = "Số điện thoại")]
-        public string Phone { get; set; }
-        public int ProductId { get; set; }
-        [ForeignKey("ProductId")]
-        public virtual Product Product { get; set; }
-        public DateTime CreateDate { get; set; }
-
-        public ProductRating()
-        {
-            CreateDate = DateTime.Now;
-        }
-
-    }
+    
+   
 }

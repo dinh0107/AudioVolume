@@ -10,11 +10,6 @@ using AudioVolume.Models;
 
 namespace AudioVolume.ViewModel
 {
-    public class ListVoucherViewModel
-    {
-        public IPagedList<Voucher> Vouchers { get; set; }
-    }
-
     public class CreateVoucherViewModel
     {
         [Display(Name = "Số lượng"), Required(ErrorMessage = "Nhập số lượng mã cần tạo"), RegularExpression(@"\d+", ErrorMessage = "Chỉ nhập số nguyên dương"), UIHint("NumberBox")]
@@ -30,7 +25,6 @@ namespace AudioVolume.ViewModel
         public int VoucherId { get; set; }
         [Display(Name = "Khách hàng")]
         public int CustomerId { get; set; }
-        public IEnumerable<Customer> Customers { get; set; }
         public SelectList VoucherSelectList { get; set; }
     }
 
@@ -38,19 +32,16 @@ namespace AudioVolume.ViewModel
     {
         [Display(Name = "Số điện thoại"), Required(ErrorMessage = "Hãy nhập Số điện thoại"), StringLength(10, ErrorMessage = "Tối đa 10 ký tự"), UIHint("TextBox"), Remote("CheckPhoneNumber", "Customer")]
         public string Mobile { get; set; }
-        public Customer Customer { get; set; }
     }
 
     public class ListCustomerViewModel
     {
         public string Name { get; set; }
-        public IPagedList<Customer> Customers { get; set; }
 
     }
 
     public class TripViewModel
     {
-        public Trip Trip { get; set; }
         [Display(Name = "Giá"), UIHint("MoneyBox"), DisplayFormat(DataFormatString = "{0:N0}đ")]
         public string Price { get; set; }
         [Display(Name = "Giá khuyến mãi"), UIHint("MoneyBox"), DisplayFormat(DataFormatString = "{0:N0}đ")]
@@ -72,8 +63,6 @@ namespace AudioVolume.ViewModel
     {
         public decimal? Revenue { get; set; }
         public decimal? Sales { get; set; }
-        public Customer Customer { get; set; }
-        public IEnumerable<Trip> Trips { get; set; }
     }
 
     public class ListTripViewModel
@@ -83,7 +72,5 @@ namespace AudioVolume.ViewModel
         public string Time { get; set; }
         public int CustomerId { get; set; }
         public int Status { get; set; }
-        public IEnumerable<Customer> Customers { get; set; }
-        public IPagedList<Trip> Trips { get; set; }
     }
 }

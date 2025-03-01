@@ -119,18 +119,6 @@ namespace AudioVolume.Controllers
             return Json(new { status = true, msg = "Gửi liên hệ thành công.\nChúng tôi sẽ liên lạc với bạn sớm nhất có thể." });
         }
 
-        [Route("gioi-thieu")]
-        public ActionResult Introduce()
-        {
-            var banners = _unitOfWork.BannerRepository.GetQuery(a => a.Active, o => o.OrderBy(a => a.Sort));
-            var model = new IntroduceViewModel
-            {
-                Introduce = _unitOfWork.IntroduceRepository.GetQuery().FirstOrDefault(),
-                Banners = banners.Where(a => a.GroupId == 6).Take(3),
-                Banner = banners.Where(a => a.GroupId == 7 && a.Image != null).FirstOrDefault()
-            };
-            return View(model);
-        }
 
         #region Product
         [Route("dich-vu")]
