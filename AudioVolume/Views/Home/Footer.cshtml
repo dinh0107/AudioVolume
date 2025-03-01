@@ -7,9 +7,42 @@
 }
 <div class="overlay"></div>
 
-<section class="footer_new_new ">
+<section class="footer_new_new">
     <div class="container">
-        
+        <div class="footer_images">
+            <p class="footer_title">Cám ơn sự ủng hộ của khách hàng khắp mọi miền đất nước</p>
+            <div class="content_image">
+                <div class="image_map">
+                    @if (config.AboutFooter != null)
+                    {
+                        <img src="@Path.Combine("/images/configs/", config.AboutFooter)">
+                    }
+
+
+                </div>
+                <div class="image_slider">
+                    <div id="footer_images">
+                        <img>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer_line"></div>
+        @if (Model.Banners.Any())
+        {
+            <div class="icon_top_footer">
+                <ul>
+                    @foreach (var item in Model.Banners)
+                    {
+                        if (item.Image != null)
+                        {
+                            <li><img src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName"></li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+
         @if (Model.ShowRooms.Any())
         {
             var number = 1;

@@ -1,0 +1,58 @@
+﻿@model AudioVolume.ViewModel.SearchViewModel
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Tìm kiếm";
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("Search");
+}
+<section class="container">
+    <div class="row">
+        <div class="container">
+            <div class="row">
+                <div class="breadcrumb-main">
+                    <ol class="breadcrumb">
+                        <li itemprop="itemListElement" style="display: inline-block;">
+                            <a itemprop="item" href="/">
+                                <span itemprop="name">Trang Chủ</span>
+                            </a>
+                        </li>
+                        <i class="fa-solid fa-angle-right"></i>
+                        <li class="active" style="display: inline-block;">
+                            <span>
+                                Tìm sản phẩm với từ khóa "<b>@Model.Keysearch</b>"
+                            </span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <ul class="list-product-all" id="list-product-all">
+            @foreach (var item in Model.Products)
+            {
+                @Html.Partial("_ProductItem", item)
+            }
+
+            @if (Model.Products.PageCount > 1)
+            {
+                @Html.PagedListPager(Model.Products, page => Url.Action("Search", new { page, keysearch = Model.Keysearch }))
+            }
+            @*@if (Model.Products.Any())
+            {
+                foreach (var item in Model.Products)
+                {
+                    @Html.Partial("_ProductItem", item)
+                }
+
+                if (Model.Products.PageCount > 1)
+                {
+                    @Html.PagedListPager(Model.Products, page => Url.Action("Search", new { page, keysearch = Model.Keysearch }))
+                }
+            }
+            else
+            {
+                <li class="text-danger">@ViewBag.Message</li>
+            }*@
+
+        </ul>
+    </div>
+
+</section>

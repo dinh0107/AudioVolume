@@ -5,7 +5,6 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using AudioVolume.DAL;
 using AudioVolume.Migrations;
 namespace AudioVolume
 {

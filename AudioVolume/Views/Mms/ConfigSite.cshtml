@@ -68,6 +68,17 @@
                             </div>
                         }
                         <div class="mb-3 row">
+                            @Html.LabelFor(a => a.AboutFooter, new { @class = "col-form-label col-lg-3" })
+                            <div class="col-lg-9">@Html.TextBoxFor(a => a.AboutFooter, new { type = "file" })</div>
+                        </div>
+                        if (Model.AboutFooter != null)
+                        {
+                            <div class="mb-3 row">
+                                <label class="col-form-label col-lg-3"></label>
+                                <div class="col-lg-9"><img class="img-border" src="@Path.Combine("/images/configs/", Model.AboutFooter)?w=150" /></div>
+                            </div>
+                        }
+                        <div class="mb-3 row">
                             @Html.LabelFor(a => a.AboutImage, new { @class = "col-form-label col-lg-3" })
                             <div class="col-lg-9">@Html.TextBoxFor(a => a.AboutImage, new { type = "file" })</div>
                         </div>
@@ -79,25 +90,25 @@
                             </div>
                         }
                         @*<div class="mb-3 row">
-                            @Html.LabelFor(a => a.AboutText, new { @class = "col-form-label col-lg-3" })
-                            <div class="col-lg-9">@Html.EditorFor(a => a.AboutText)</div>
-                        </div>
-                        <div class="mb-3 row">
-                            @Html.LabelFor(a => a.AboutUrl, new { @class = "col-form-label col-lg-3" })
-                            <div class="col-lg-9">@Html.EditorFor(a => a.AboutUrl)</div>
-                        </div>
-                        <div class="mb-3 row">
-                            @Html.LabelFor(a => a.Price, new { @class = "col-form-label col-lg-3" })
-                            <div class="col-lg-9">@Html.EditorFor(a => a.Price)</div>
-                        </div>*@
+                @Html.LabelFor(a => a.AboutText, new { @class = "col-form-label col-lg-3" })
+                <div class="col-lg-9">@Html.EditorFor(a => a.AboutText)</div>
+            </div>
+            <div class="mb-3 row">
+                @Html.LabelFor(a => a.AboutUrl, new { @class = "col-form-label col-lg-3" })
+                <div class="col-lg-9">@Html.EditorFor(a => a.AboutUrl)</div>
+            </div>
+            <div class="mb-3 row">
+                @Html.LabelFor(a => a.Price, new { @class = "col-form-label col-lg-3" })
+                <div class="col-lg-9">@Html.EditorFor(a => a.Price)</div>
+            </div>*@
                         @*<div class="mb-3 row">
-                            @Html.LabelFor(a => a.InfoContact, new { @class = "col-form-label col-lg-3" })
-                            <div class="col-lg-9">@Html.EditorFor(a => a.InfoContact)</div>
-                        </div>
-                        <div class="mb-3 row">
-                            @Html.LabelFor(a => a.InfoFooter, new { @class = "col-form-label col-lg-3" })
-                            <div class="col-lg-9">@Html.EditorFor(a => a.InfoFooter)</div>
-                        </div>*@
+                @Html.LabelFor(a => a.InfoContact, new { @class = "col-form-label col-lg-3" })
+                <div class="col-lg-9">@Html.EditorFor(a => a.InfoContact)</div>
+            </div>
+            <div class="mb-3 row">
+                @Html.LabelFor(a => a.InfoFooter, new { @class = "col-form-label col-lg-3" })
+                <div class="col-lg-9">@Html.EditorFor(a => a.InfoFooter)</div>
+            </div>*@
                         <div class="mb-3 row">
                             @Html.LabelFor(a => a.Place, new { @class = "col-form-label col-lg-3" })
                             <div class="col-lg-9">@Html.EditorFor(a => a.Place)</div>

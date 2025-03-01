@@ -227,7 +227,7 @@ namespace AudioVolume.Controllers
                     var imgFile = DateTime.Now.ToString("yyyy/MM/dd") + "/" + imgFileName;
 
                     var newImage = Image.FromStream(Request.Files[i].InputStream);
-                    var fixSizeImage = HtmlHelpers.FixedSize(newImage, 1000, 1000, false);
+                    var fixSizeImage = HtmlHelpers.FixedSize(newImage, 1200, 1200, false);
                     HtmlHelpers.SaveJpeg(Server.MapPath(Path.Combine(imgPath, imgFileName)), fixSizeImage, 90);
 
                     if (Request.Files.Keys[i] == "Image")
@@ -241,6 +241,10 @@ namespace AudioVolume.Controllers
                     else if (Request.Files.Keys[i] == "AboutImage")
                     {
                         config.AboutImage = imgFile;
+                    }
+                    else if (Request.Files.Keys[i] == "AboutFooter")
+                    {
+                        config.AboutFooter = imgFile;
                     }
                 }
 

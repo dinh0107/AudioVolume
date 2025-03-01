@@ -82,6 +82,15 @@
                         <tbody>
                             @foreach (var banner in Model.Banners)
                             {
+                                var postion = "";
+                                if(banner.GroupId == 1)
+                                {
+                                    postion = "Banner";
+                                }
+                                else
+                                {
+                                    postion = "Giới thiệu";
+                                }
                                 <tr data-id="@banner.Id">
                                     <td style="width: 100px;">
                                         <input type="number" name="Sort" value="@banner.Sort" class="form_control w100" />
@@ -104,7 +113,7 @@
                                         <strong>@banner.BannerName</strong><br /><br />
                                         @banner.Slogan
                                     </td>
-                                    <td>@Html.DisplayFor(model => banner.GroupId)</td>
+                                    <td>@postion</td>
                                     <td>
                                         <label class="form-check-label">
                                             <input type="checkbox" id="Active" @if (banner.Active) { @Html.Raw("value='true' checked")  } else { @Html.Raw("value='false'") } />

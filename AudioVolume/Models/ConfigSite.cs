@@ -29,6 +29,8 @@ namespace AudioVolume.Models
         public string Title { get; set; }
         [Display(Name = "Ảnh giới thiệu"), UIHint("ImageAbout")]
         public string AboutImage { get; set; }
+        [Display(Name = "Ảnh chân trang"), UIHint("ImageAbout")]
+        public string AboutFooter { get; set; }
         [Display(Name = "Ảnh Sứ mệnh"), UIHint("ImageAbout")]
         public string AboutMission { get; set; }
         [Display(Name = "Thông tin bài giới thiệu"), UIHint("EditorBox")]

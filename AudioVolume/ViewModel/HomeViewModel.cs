@@ -26,10 +26,22 @@ namespace AudioVolume.ViewModel
         public Banner Banner { get; set; }
     }
 
+    public class SearchViewModel
+    {
+        public IPagedList<Product> Products { get; set; }
+        public string Keysearch { get; set; }
+    }
+    public class SearchQuickViewModel
+    {
+        public IEnumerable<Product> Products { get; set; }
+        public string Keysearch { get; set; }
+    }
+
     public class FooterViewModel
     {
         public Contact Contact { get; set; }
         public IEnumerable<Article> Articles { get; set; }
+        public IEnumerable<Banner> Banners { get; set; }
         public IEnumerable<ArticleCategory> ArticleCategories { get; set; }
         public IEnumerable<ProductCategory> ProductCategories { get; set; }
         public IEnumerable<ShowRoom> ShowRooms { get; set; }

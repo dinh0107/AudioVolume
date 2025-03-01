@@ -1,0 +1,47 @@
+﻿@model AudioVolume.ViewModel.SearchQuickViewModel
+    @{ 
+        var count = Model.Products.Count() - 5;
+    }
+<ul>
+    @if (Model.Products.Any())
+    {
+        foreach (var item in Model.Products.Take(5))
+        {
+            <li>
+                <a href="@Url.Action("ProductDetail", new {url= item.Url})">
+                    @if (item.Image != null)
+                    {
+                        <img src="@Path.Combine("/images/products/", item.Image)">
+                    }
+                    <p>@item.Name</p>
+                    <p>
+                        @if (item.PriceSale > 0)
+                        {
+                            <span class="search-pro-price-new">
+                                @item.PriceSale
+                            </span>
+                        }
+                        else if (item.Price > 0)
+                        {
+                            <span class="search-pro-price-new">
+                                @item.Price
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="search-pro-price-new">
+                                Liên hệ
+                            </span>
+                        }
+                    </p>
+                </a>
+            </li>
+        }
+        <li class="total-search-product"><a href="@Url.Action("Search", new {keysearch = Model.Keysearch})">Xem thêm @count sản phẩm phù hợp</a></li>
+    }
+    else
+    {
+        <li class="text-danger">@ViewBag.Message</li>
+    }
+
+</ul>

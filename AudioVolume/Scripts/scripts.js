@@ -144,87 +144,12 @@ function productDetail() {
   });
 }
 
-$(document).ready(function () {
-  var review_pro_search = document.getElementById("review-product-search");
-  var review_product_search_content = document.getElementById(
-    "review-product-search-content"
-  );
-  var review_pro_search_mobile = document.getElementById(
-    "review-product-search-mobile"
-  );
-  var review_product_search_content_mobile = document.getElementById(
-    "review-product-search-content-mobile"
-  );
-
-  var close_suggest_search = document.getElementById("close-suggest-search");
-  var close_suggest_search_mobile = document.getElementById(
-    "close-suggest-search-mobile"
-  );
-
-  var keysearch_header = document.getElementById("keysearch");
-  var keysearch_header_mobile = document.getElementById("keysearch-mobile");
-
-  keysearch_header.onblur = keysearch_header.onfocus = function () {
-    review_pro_search.style.display = "block";
-  };
-
-  keysearch_header_mobile.onblur = keysearch_header_mobile.onfocus =
-    function () {
-      review_pro_search_mobile.style.display = "block";
-    };
-
-  //bg_black_full_page.onclick = close_suggest_search.onclick = close_suggest_search_mobile.onclick = close_all_suggest
-  function close_all_suggest() {
-    review_pro_search.style.display = "none";
-    review_pro_search_mobile.style.display = "none";
-  }
-
-  keysearch_header.onkeyup = function () {
-    var keysearch = encodeURIComponent(keysearch_header.value);
-    if (keysearch.length >= 3) {
-      $.ajax({
-        url: "Home/SearchProduct",
-        method: "POST",
-        dataType: "json",
-        data: "keysearch=" + keysearch,
-      }).done(function (data) {
-        console.log(data);
-        var x =
-          data.data +
-          '<div class="close-suggest-search" id="close-suggest-search">Đóng</div>';
-        review_product_search_content.innerHTML = x;
-        document.getElementById("close-suggest-search").onclick =
-          close_all_suggest;
-      });
-    }
-    };
-    $(".expand-bar").click(function () {
-        $(this).toggleClass('open');
-        $(this).siblings('.sub-nav-mb').slideToggle();
-    });
-    
-
-
-  keysearch_header_mobile.onkeyup = function () {
-    var keysearch = encodeURIComponent(keysearch_header_mobile.value);
-    if (keysearch.length >= 3) {
-      $.ajax({
-        url: "Home/SearchProduct",
-        method: "POST",
-        dataType: "json",
-        data: "keysearch=" + keysearch,
-      }).done(function (data) {
-        var x =
-          data.data +
-          '<div class="close-suggest-search" id="close-suggest-search-mobile">Đóng</div>';
-        review_product_search_content_mobile.innerHTML = x;
-        document.getElementById("close-suggest-search-mobile").onclick =
-          close_all_suggest;
-      });
-    }
-  };
-});
-
+$("#keysearch").on('click', function () {
+    $('.review-product-search').css('display', 'block')
+})
+$(".close-suggest-search").on('click', function () {
+    $('.review-product-search').css('display', 'none')
+})
 function openBar() {
     $(".menu-mb").toggleClass("active");
     $(".overlay").toggleClass("active");
@@ -232,4 +157,31 @@ function openBar() {
 $(".overlay").click(function () {
     $(this).removeClass("active");
     $(".menu-mb").removeClass("active");
+});
+
+$(document).ready(function () {
+    $('#keysearch').on('keyup', function () {
+        var keysearch = $(this).val().trim();
+        if (keysearch.length >= 3) {
+            $.ajax({
+                url: 'Home/SearchProduct',
+                type: 'POST',
+                data: { keysearch: keysearch },
+                success: function (result) {
+                    $('#review-product-search-content').html(result);
+                    $('#review-product-search').show();
+                },
+                error: function () {
+                    $('#review-product-search-content').html('<p>Đã xảy ra lỗi trong quá trình tìm kiếm.</p>');
+                    $('#review-product-search').show();
+                }
+            });
+        } else {
+            $('#review-product-search').hide();
+        }
+    });
+
+    $('#close-suggest-search').on('click', function () {
+        $('#review-product-search').hide();
+    });
 });

@@ -13,7 +13,8 @@ namespace AudioVolume.ViewModel
         {
             var listgroup = new Dictionary<int, string>
             {
-                { 1, "Banner" }
+                { 1, "Banner" },
+                {2, "Giới thiệu" }
             };
             SelectGroup = new SelectList(listgroup, "Key", "Value");
         }
@@ -31,7 +32,9 @@ namespace AudioVolume.ViewModel
         {
             var listgroup = new Dictionary<int, string>
             {
-                { 1, "Banner" }
+                { 1, "Banner" },
+                {2, "Giới thiệu" }
+
             };
             SelectGroup = new SelectList(listgroup, "Key", "Value");
         }

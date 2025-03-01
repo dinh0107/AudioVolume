@@ -63,27 +63,13 @@ namespace AudioVolume.Controllers
                 Articles = _unitOfWork.ArticleRepository.GetQuery(a => a.Active , o => o.OrderByDescending(a => a.CreateDate)),
                 ProductCategories = ProductCategories.Where(a => a.ShowFooter),
                 ArticleCategories = ArticleCategories.Where(a => a.ShowFooter),
-                ShowRooms = _unitOfWork.ShowRoomRepository.Get()
+                ShowRooms = _unitOfWork.ShowRoomRepository.Get(),
+                Banners = _unitOfWork.BannerRepository.GetQuery(a => a.Active && a.GroupId == 2 , o => o.OrderBy(a => a.Sort))
             };
             return PartialView(model);
         }
         #endregion
 
-        #region LandingPage
-        public PartialViewResult IndexLanding()
-        {
-            var model = new HomeViewModel
-            {
-                Banners = _unitOfWork.BannerRepository.GetQuery(a => a.Active, o => o.OrderBy(a => a.Sort))
-            };
-            return PartialView(model);
-        }
-        [ChildActionOnly]
-        public PartialViewResult HeaderLanding()
-        {
-            return PartialView();
-        }
-        #endregion
 
         public PartialViewResult ContactForm()
         {
@@ -301,26 +287,43 @@ namespace AudioVolume.Controllers
         }
         #endregion
 
+        [HttpPost]
         public PartialViewResult SearchProduct(string keysearch)
         {
-            if (!String.IsNullOrEmpty(keysearch))
+            if (string.IsNullOrEmpty(keysearch))
             {
-                var products = _unitOfWork.ProductRepository.GetQuery(
-                    a => a.Active && a.Name.Contains(keysearch),
-                    o => o.OrderByDescending(a => a.CreateDate)
-                ).Take(50);
-
-                if (!products.Any())
-                {
-                    ViewBag.Message = "No products found matching your search.";
-                }
-
-                return PartialView(products);
+                ViewBag.Message = "Vui lòng nhập từ khóa tìm kiếm.";
             }
+            var products = _unitOfWork.ProductRepository.GetQuery(
+                   a => a.Active && a.Name.Contains(keysearch),
+                   o => o.OrderByDescending(a => a.CreateDate)
+               );
 
-            ViewBag.Message = "Please enter a search term.";
-            return PartialView();
+            if (!products.Any())
+            {
+                ViewBag.Message = "Không tìm thấy sản phẩm nào phù hợp.";
+            }
+            var model = new SearchQuickViewModel
+            {
+                Keysearch = keysearch,
+                Products = products
+            };
+            return PartialView("_ProductSearchResults", model);
         }
-
+        [Route("tim-kiem")]
+        public ActionResult Search(string keysearch , int? page)
+        {
+            var pageNumber = page ?? 1;
+            var products = _unitOfWork.ProductRepository.GetQuery(
+                     a => a.Active && a.Name.Contains(keysearch),
+                     o => o.OrderByDescending(a => a.CreateDate)
+                 );
+            var model = new SearchViewModel
+            {
+                Keysearch = keysearch,
+                Products = products.ToPagedList(20, pageNumber),
+            };
+            return View(model);
+        }
     }
 }
