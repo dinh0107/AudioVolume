@@ -83,14 +83,20 @@
                             @foreach (var banner in Model.Banners)
                             {
                                 var postion = "";
-                                if(banner.GroupId == 1)
+                                switch (banner.GroupId)
                                 {
-                                    postion = "Banner";
+                                    case 1:
+                                        postion = "Banner";
+                                        break;
+                                    case 2:
+                                        postion = "Giới thiệu";
+                                        break;
+                                    case 3:
+                                        postion = "Ảnh khách hàng";
+                                        break;
                                 }
-                                else
-                                {
-                                    postion = "Giới thiệu";
-                                }
+
+
                                 <tr data-id="@banner.Id">
                                     <td style="width: 100px;">
                                         <input type="number" name="Sort" value="@banner.Sort" class="form_control w100" />
@@ -100,8 +106,8 @@
                                         {
                                             <img class="img-border" src="@Path.Combine("/images/banners/", banner.Image)" />
                                         }
-                                            else if (banner.ListImage != null)
-                                            {
+                                        else if (banner.ListImage != null)
+                                        {
                                             <img src="@Path.Combine("/images/banners/", banner.ListImage.Split(',')[0])" class="img-border" />
                                         }
                                         else
