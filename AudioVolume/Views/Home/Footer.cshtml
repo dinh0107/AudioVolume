@@ -17,22 +17,29 @@
                     {
                         <img src="@Path.Combine("/images/configs/", config.AboutFooter)">
                     }
-
-
                 </div>
                 <div class="image_slider">
-                    <div id="footer_images">
-                        <img>
+                    <div id="footer_images" class="owl-carousel">
+                        @foreach (var item in Model.ImageFooter)
+                        {
+                            if (item.ListImage != null)
+                            {
+                                foreach (var arr in item.ListImage.Split(','))
+                                {
+                                    <img src="@Path.Combine("/images/banners/", arr)">
+                                }
+                            }
+                        }
                     </div>
                 </div>
             </div>
         </div>
         <div class="footer_line"></div>
-        @if (Model.Banners.Any())
+        @if (Model.Banners.Any(a => a.GroupId == 2))
         {
             <div class="icon_top_footer">
                 <ul>
-                    @foreach (var item in Model.Banners)
+                    @foreach (var item in Model.Banners.Where(a => a.GroupId == 2))
                     {
                         if (item.Image != null)
                         {
@@ -156,6 +163,3 @@
         </div>
     </div>
 </section>
-<!-- BackToTop Button -->
-<!--<a href="javascript:void(0);" id="scroll_go_top" title="Scroll to Top" style="display: none;">Top<span></span></a>
-<a href="javascript:void(0);" id="scroll" title="Scroll to Top" style="display: none;"></a>-->

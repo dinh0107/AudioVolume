@@ -83,7 +83,7 @@
                     <section class="pg-slider-full">
                         <div class="main_slider_home">
                             <div id="sync1" class="owl-carousel owl-theme">
-                                @foreach (var item in Model.Banners.Where(a => a.GroupId == 1))
+                                @foreach (var item in Model.Banners)
                                 {
 
                                     <div class="item">
@@ -95,7 +95,7 @@
                                 }
                             </div>
                             <div id="sync2" class="owl-carousel owl-theme  hidden-sm hidden-xs hidden-md">
-                                @foreach (var item in Model.Banners.Where(a => a.GroupId == 1))
+                                @foreach (var item in Model.Banners)
                                 {
                                     <div class="item">
                                         @Html.Raw(item.BannerName)

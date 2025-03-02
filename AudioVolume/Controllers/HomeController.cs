@@ -38,7 +38,7 @@ namespace AudioVolume.Controllers
             var model = new HomeViewModel
             {
                 CategoryItems = categoryItems,
-                Banners = _unitOfWork.BannerRepository.GetQuery(a => a.Active, o => o.OrderBy(a => a.Sort)),
+                Banners = _unitOfWork.BannerRepository.GetQuery(a => a.Active && a.GroupId == 1, o => o.OrderBy(a => a.Sort)),
                 Products = _unitOfWork.ProductRepository.GetQuery(a => a.Active && a.Top , o => o.OrderByDescending(a => a.CreateDate)),
                 ChildCat  = ProductCategories.Where(a => a.Home),
                 Articles = _unitOfWork.ArticleRepository.GetQuery(a => a.Active && (a.Home && a.ArticleCategory.TypePost == TypePost.Article) , o => o.OrderByDescending(a => a.CreateDate))
@@ -64,7 +64,8 @@ namespace AudioVolume.Controllers
                 ProductCategories = ProductCategories.Where(a => a.ShowFooter),
                 ArticleCategories = ArticleCategories.Where(a => a.ShowFooter),
                 ShowRooms = _unitOfWork.ShowRoomRepository.Get(),
-                Banners = _unitOfWork.BannerRepository.GetQuery(a => a.Active && a.GroupId == 2 , o => o.OrderBy(a => a.Sort))
+                Banners = _unitOfWork.BannerRepository.GetQuery(a => a.Active  , o => o.OrderBy(a => a.Sort)),
+                ImageFooter = _unitOfWork.BannerRepository.GetQuery(a => a.Active && a.GroupId == 3 , o => o.OrderByDescending(a => a.Sort)).Take(1)
             };
             return PartialView(model);
         }

@@ -150,6 +150,14 @@ $("#keysearch").on('click', function () {
 $(".close-suggest-search").on('click', function () {
     $('.review-product-search').css('display', 'none')
 })
+
+
+$("#keysearch-mobile").on('click', function () {
+    $('#review-product-search-mobile').css('display', 'block')
+})
+$("#close-suggest-search-mobile").on('click', function () {
+    $('#review-product-search-mobile').css('display', 'none')
+})
 function openBar() {
     $(".menu-mb").toggleClass("active");
     $(".overlay").toggleClass("active");
@@ -184,4 +192,46 @@ $(document).ready(function () {
     $('#close-suggest-search').on('click', function () {
         $('#review-product-search').hide();
     });
+
+
+
+
+    //
+
+
+    $('#keysearch-mobile').on('keyup', function () {
+        var keysearch = $(this).val().trim();
+        if (keysearch.length >= 3) {
+            $.ajax({
+                url: 'Home/SearchProduct',
+                type: 'POST',
+                data: { keysearch: keysearch },
+                success: function (result) {
+                    $('#review-product-search-content-mobile').html(result);
+                    $('#review-product-search-mobile').show();
+                },
+                error: function () {
+                    $('#review-product-search-content-mobile').html('<p>Đã xảy ra lỗi trong quá trình tìm kiếm.</p>');
+                    $('#review-product-search').show();
+                }
+            });
+        } else {
+            $('#review-product-search-mobile').hide();
+        }
+    });
+
+    $('#close-suggest-search').on('click', function () {
+        $('#review-product-search').hide();
+    });
+});
+$('#footer_images').owlCarousel({
+    items: 3,
+    lazyLoad: true,
+    loop: true,
+    margin: 10,
+    nav: false,
+    dots: false,
+    autoplay: true,
+    autoplayTimeout: 4000,
+    autoplayHoverPause: true
 });
