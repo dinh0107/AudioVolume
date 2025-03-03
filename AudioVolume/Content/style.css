@@ -29245,6 +29245,7 @@ html {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  width: 100%;
 }
 
 .footer_new_new .container .footer_showroom .showroom_list ul.list-showroom-all li {

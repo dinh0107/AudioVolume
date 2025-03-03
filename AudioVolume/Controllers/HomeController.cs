@@ -322,7 +322,7 @@ namespace AudioVolume.Controllers
             var model = new SearchViewModel
             {
                 Keysearch = keysearch,
-                Products = products.ToPagedList(20, pageNumber),
+                Products = products.ToPagedList(pageNumber, 20),
             };
             return View(model);
         }

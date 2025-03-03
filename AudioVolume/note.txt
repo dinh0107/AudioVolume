@@ -1,0 +1,12 @@
+﻿https://winhosthn-092303.000nethost.com:8443/
+username: oobzvhwehosting
+pwd: xh6j8@@m%1nr>I0OKDVT
+
+host: .\MSSQLSERVER2019
+Databasename: volume
+username: volume_sa
+password: 67$oS86cs
+
+host: 202.92.7.204
+ftp: audiovolume
+ftp pwd: HxxU?Jo84kgs@c0g
