@@ -1,5 +1,5 @@
 ﻿@model AudioVolume.ViewModel.HeaderViewModel
-    @using AudioVolume.Models
+@using AudioVolume.Models
 @{
     var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
 }
@@ -22,7 +22,7 @@
             </div>
             <div class="header_form_search">
                 <form class="search-product-top" id="search-product-top" action="@Url.Action("Search")" method="get">
-                    <input type="text" class="form-control" name="keysearch" id="keysearch"  placeholder="Bạn tìm gì..."
+                    <input type="text" class="form-control" name="keysearch" id="keysearch" placeholder="Bạn tìm gì..."
                            autocomplete="off">
                     <button class="btn_header_search" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -39,6 +39,7 @@
                 <div class="pro_viewed">
                     <span>Sản phẩm đã xem <i class="fa-sharp fa-solid fa-caret-down"></i></span>
                     <div class="pro_viewed_content">
+                        @Html.Action("GetViewedProducts", "Home")
                     </div>
                 </div>
                 <div class="header_hotline">
@@ -47,12 +48,12 @@
                         <span>Miễn phí cước gọi</span>
                     </a>
                 </div>
-                @*<div class="header_safeoff_month">
-                    <a href="khuyen-mai-moi.html">
-                        <img src="~/Content/images/icon-khuyenmai.png" alt="icon-new-03">
-                        Khuyến Mãi Sốc
-                    </a>
-                </div>*@
+                <div class="header_safeoff_month">
+                        <a href="@Url.Action("Contact")">
+                            <img src="~/Content/images/icon-khuyenmai.png" alt="icon-new-03">
+                            Liên hệ ngay
+                        </a>
+                    </div>
             </div>
             <style>
                 .dropdown-shop-small-cnt .noProductInCart {
@@ -165,7 +166,7 @@
             }
         </a>
     </div>
-    
+
     <div class="header-mobile-content">
         <div class="logo-mobile">
             <a href="/">

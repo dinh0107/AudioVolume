@@ -235,3 +235,31 @@ $('#footer_images').owlCarousel({
     autoplayTimeout: 4000,
     autoplayHoverPause: true
 });
+
+
+
+
+
+$("#bookingForm").on("submit", function (e) {
+    e.preventDefault();
+    if ($(this).valid()) {
+        $.post("/Home/ContactForm", $(this).serialize(), function (data) {
+            if (data.status) {
+                $.toast({
+                    heading: 'Liên hệ thành công',
+                    text: data.msg,
+                    icon: 'success',
+                    position: "bottom-right"
+                })
+                $("#bookingForm").trigger("reset");
+            } else {
+                $.toast({
+                    heading: 'Liên hệ không thành công',
+                    text: data.msg,
+                    icon: 'error',
+                    position: "bottom-right"
+                })
+            }
+        });
+    }
+});

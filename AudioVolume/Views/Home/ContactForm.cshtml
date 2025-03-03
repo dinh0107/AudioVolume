@@ -1,28 +1,41 @@
 ﻿@model AudioVolume.Models.Contact
 
-<div class="form-group">
-    <div class="frm_comment">
-        @Html.TextBoxFor(a => a.Fullname , new { @placeholder = "Nhập họ tên" })
-        <small>@Html.ValidationMessageFor(a => a.Fullname)</small>
+<form class="form-horizontal form-register" id="bookingForm">
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="form-group">
+        <label for="inputEmail3" class="col-md-2 control-label">Họ tên <span>(*)</span></label>
+        <div class="col-md-9">
+            @Html.TextBoxFor(a => a.Fullname , new {@class="form-control", @placeholder = "Họ và tên..." })
+        </div>
     </div>
-</div>
-
-<div class="form-group">
-    <div class="frm_comment">
-        @Html.TextBoxFor(a => a.Email, new { @placeholder = "Email" })
-        <small>@Html.ValidationMessageFor(a => a.Email)</small>
+    <div class="form-group">
+        <label for="inputEmail3" class="col-md-2 control-label">Địa chỉ <span>(*)</span></label>
+        <div class="col-md-9">
+            @Html.TextBoxFor(a => a.Address, new { @class = "form-control", @placeholder = "Địa chỉ...", @required= "required" })
+        </div>
     </div>
-</div>
-
-<div class="form-group">
-    <div class="frm_comment">
-        @Html.TextBoxFor(a => a.Mobile, new { @placeholder = "Nhập số điện thoại" })
-        <small>@Html.ValidationMessageFor(a => a.Mobile)</small>
+    <div class="form-group">
+        <label for="inputPassword3" class="col-md-2 control-label">Điện thoại <span>(*)</span></label>
+        <div class="col-md-9">
+            @Html.TextBoxFor(a => a.Mobile, new { @class = "form-control", @placeholder = "Điện thoại...", @required = "required" })
+        </div>
     </div>
-</div>
-
-<div class="form-group">
-    <div class="frm_comment">
-        @Html.TextAreaFor(a => a.Body, new { @placeholder = "Nhập nội dung" })
+    <div class="form-group">
+        <label for="inputPassword3" class="col-md-2 control-label">Email </label>
+        <div class="col-md-9">
+            @Html.TextBoxFor(a => a.Email, new { @class = "form-control", @placeholder = "Email...", @required = "required" })
+        </div>
     </div>
-</div>
+    <div class="form-group">
+        <label for="inputPassword3" class="col-md-2 control-label">Nội dung</label>
+        <div class="col-md-9">
+            @Html.TextAreaFor(a => a.Body , new {@class="form-control" ,@rows="5" , @placeholder = "Ghi chú..." })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn-cart btn-register">Gửi</button>
+        </div>
+    </div>
+</form>

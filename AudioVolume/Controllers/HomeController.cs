@@ -10,6 +10,7 @@ using AudioVolume.DAL;
 using AudioVolume.Models;
 using AudioVolume.ViewModel;
 using System.IO;
+using System.Web;
 namespace AudioVolume.Controllers
 {
     public class HomeController : Controller
@@ -79,9 +80,8 @@ namespace AudioVolume.Controllers
         [Route("lien-he")]
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            var article = _unitOfWork.ArticleRepository.GetQuery(a => a.Active && a.ArticleCategory.TypePost == TypePost.Article, o => o.OrderByDescending(a => a.CreateDate)).Take(10);
+            return View(article);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -151,6 +151,20 @@ namespace AudioVolume.Controllers
                 return RedirectToAction("Index");
             }
 
+            var cookie = Request.Cookies["ViewedProducts"];
+            List<int> viewedProducts = cookie != null ? cookie.Value.Split(',').Select(int.Parse).ToList() : new List<int>();
+
+            if (!viewedProducts.Contains(product.Id))
+            {
+                viewedProducts.Add(product.Id);
+
+                var viewedCookie = new HttpCookie("ViewedProducts", string.Join(",", viewedProducts));
+                viewedCookie.Expires = DateTime.Now.AddDays(30);
+                Response.Cookies.Add(viewedCookie);
+            }
+
+
+
             var products = _unitOfWork.ProductRepository.GetQuery(a => a.Active && a.Id != product.Id && a.ProductCategoryId == product.ProductCategoryId, o => o.OrderByDescending(a => a.CreateDate), 8);
             
 
@@ -168,6 +182,16 @@ namespace AudioVolume.Controllers
             }
             return View(model);
         }
+        public PartialViewResult GetViewedProducts()
+        {
+            var cookie = Request.Cookies["ViewedProducts"];
+            List<int> viewedProducts = cookie != null ? cookie.Value.Split(',').Select(int.Parse).ToList() : new List<int>();
+
+            var products = _unitOfWork.ProductRepository.GetQuery(a => viewedProducts.Contains(a.Id));
+
+            return PartialView("_ViewedProducts", products);
+        }
+
         public PartialViewResult Rating()
         {
             return PartialView();

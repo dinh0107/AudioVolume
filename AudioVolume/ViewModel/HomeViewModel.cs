@@ -86,6 +86,7 @@ namespace AudioVolume.ViewModel
     {
         public IEnumerable<Brand> Brands { get; set; }
         public IEnumerable<Product> Products { get; set; }
+        public IEnumerable<Product> ViewedProducts { get; set; }
         public Product Product { get; set; }
         public Banner Banner { get; set; }
         [Display(Name = "Tiet kiem"), DisplayFormat(DataFormatString = "{0:N0}đ")]

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<AudioVolume.Models.Product>
+<div class="pro_viewed_main">
+    @if (Model.Any())
+    {
+        <p class="header_title">Sản phẩm bạn đã xem</p>
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li>
+                    <figure>
+                        <a href="@Url.Action("ProductDetail", new {url = item.Url})">
+                            @if (item.Image != null)
+                            {
+                                <img src="@Path.Combine("/images/products/", item.Image)" alt="@item.Name">
+                            }
+                        </a>
+                    </figure>
+                    <div>
+                        <p class="title">
+                            <a href="@Url.Action("ProductDetail", new {url = item.Url})">@item.Name</a>
+                        </p>
+                        @if (item.PriceSale > 0)
+                        {
+                            <p class="price price_new">@Html.DisplayFor(a => item.PriceSale)</p>
+                            <p class="price price_old">@Html.DisplayFor(a => item.Price)</p>
+                        }
+                        else if (item.Price > 0)
+                        {
+                            <p class="price price_new">@Html.DisplayFor(a => item.Price)</p>
+                        }
+                        else
+                        {
+                            <p class="price price_new">Liên hệ</p>
+                        }
+
+                    </div>
+                </li>
+            }
+
+        </ul>
+    }
+    else
+    {
+        <p class="header_title">Bạn chưa xem sản phẩm nào</p>
+    }
+</div>

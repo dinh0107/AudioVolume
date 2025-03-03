@@ -1,41 +1,81 @@
-﻿@using AudioVolume.Models
+﻿@model IEnumerable<AudioVolume.Models.Article>
+@using AudioVolume.Models
 @{
     var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
     ViewBag.Title = "Liên hệ";
 }
+<div class="container">
+    <div class="row">
+        <div class="breadcrumb-main">
+            <ol class="breadcrumb">
+                <li itemprop="itemListElement" style="display: inline-block;">
+                    <a itemprop="item" href="/">
+                        <span itemprop="name">Trang Chủ</span>
+                    </a>
+                </li>
+                <i class="fa-solid fa-angle-right"></i>
+                <li style="display: inline-block;">
+                    <a href="">
+                        <span>Liên hệ</span>
+                    </a>
+                </li>
+            </ol>
+        </div>
 
-<section class="banner-contact">
-    <img src="~/Content/images/img-main/slider-45.jpg" alt="Banner" />
-</section>
-<section class="contact">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="contact-info">
-                    <h3>@config.Title</h3>
-                    <ul class="ul-reset">
-                        <li>
-                            <b>Địa chỉ: </b>
-                            @config.Place
-                        </li>
-                        @*<li>
-                            <b>Điện thoại: </b>
-                            <a href="tel:@config.Hotline2">@config.Hotline2</a>
-                        </li>*@
-                        <li>
-                            <b>Hotline: </b>
-                            <a href="tel:@config.Hotline">@config.Hotline</a>
-                        </li>
-                        <li>
-                            <b>Email: </b>
-                            <a href="mailto:@config.Email">@config.Email</a>
-                        </li>
-                    </ul>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 class="pg-title">
+                <a href="lien-he.html" title="đăng ký đại lý">
+                    Liên hệ với Công Ty
+                </a>
+            </h1>
+
+            <div class="pg-details">
+                <div class="info_contact">
+                    @Html.Raw(config.InfoContact)
                 </div>
+
+                <div class="bs-callout bs-callout-info">
+                    <h4>Bạn cần liên hệ với chúng tôi</h4>
+                    <p>Bạn có thể gửi cho chúng tôi bất kỳ câu hỏi hoặc đóng góp nào bằng cách điền vào form bên dưới và gửi đi.</p>
+                </div>
+                @Html.Action("ContactForm")
             </div>
-            <div class="col-lg-6">
-                <div class="map">@Html.Raw(config.GoogleMap)</div>
-            </div>
+
+        </div>
+        <div class="col-sm-4">
+            @if (Model.Any())
+            {
+                <div class="sidebar">
+                    <h3 class="media-heading">Tin tức mới</h3>
+                    @foreach (var item in Model)
+                    {
+                        <div class="main-news">
+                            <div class="media-body">
+                                <div class="title-news-sidebar">
+                                    <h3>
+                                        <a href="@Url.Action("ArticleDetail", new {url = item.Url})">
+                                            @item.Subject
+                                        </a>
+                                    </h3>
+                                </div>
+                                <p class="date-news-sidebar">@item.CreateDate.ToString("dd-MM-yyyy")</p>
+                            </div>
+                            <div class="media-right">
+                                <a href="@Url.Action("ArticleDetail", new {url = item.Url})">
+                                    @if (item.Image != null)
+                                    {
+                                        <img src="@Path.Combine("/images/articles/", item.Image)" alt="@item.Subject" style="width: 115px;padding:0">
+                                    }
+                                </a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    }
+
+                </div>
+            }
         </div>
     </div>
-</section>
+</div>

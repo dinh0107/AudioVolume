@@ -73,7 +73,9 @@
                                 <th style="width: 100px">Ngày gửi</th>
                                 <th style="width: 150px">Số điện thoại</th>
                                 <th>Email</th>
+                                <th>Địa chỉ</th>
                                 <th>Tên sản phẩm</th>
+                                <th>Nội dung</th>
                                 <th style="width: 60px"></th>
                             </tr>
                         </thead>
@@ -88,7 +90,9 @@
                                         </a>
                                     </td>
                                     <td>@contact.Email</td>
+                                    <td>@contact.Address</td>
                                     <td>@contact.ProductName</td>
+                                    <td>@contact.Body</td>
                                     <td class="action-col"><a href="javascript:;" onclick="deletecontact('@contact.Id')" style="color: red">Xóa</a></td>
                                 </tr>
                             }
