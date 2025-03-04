@@ -30,8 +30,6 @@ namespace AudioVolume.ViewModel
         public int Admins { get; set; }
         public int Banners { get; set; }
         public int Products { get; set; }
-        public int Customers { get; set; }
-        public int Trips { get; set; }
     }
 
     public class EditAdminViewModel
